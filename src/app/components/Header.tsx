@@ -10,7 +10,7 @@ export default function Header() {
     { name: "Home", path: "/" },
     { name: "Shop", path: "/shop" },
     { name: "Categories", path: "/categories" },
-    { name: "Custom Orders", path: "/custom-orders" },
+    { name: "Pedidos personalizados", path: "/custom-orders" },
     { name: "Contact", path: "/contact" },
   ];
 
