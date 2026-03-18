@@ -6,17 +6,17 @@ export default function CustomOrders() {
       {/* Header */}
       <div className="bg-gradient-to-r from-blue-600 to-blue-400 text-white py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h1 className="text-4xl font-bold mb-2">Custom Orders</h1>
-          <p className="text-blue-50">Bring your unique designs to life with our custom cutting service</p>
+          <h1 className="text-4xl font-bold mb-2">Pedidos Personalizados</h1>
+          <p className="text-blue-50">Haz realidad tus diseños únicos con nuestro servicio de corte personalizado</p>
         </div>
       </div>
 
       {/* Process Section */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">How It Works</h2>
+          <h2 className="text-3xl font-bold text-gray-900 mb-4">Cómo Funciona</h2>
           <p className="text-gray-600 max-w-2xl mx-auto">
-            Our simple 4-step process makes it easy to get exactly what you need
+            Nuestro sencillo proceso de 4 pasos hace fácil obtener exactamente lo que necesitas
           </p>
         </div>
 
@@ -28,9 +28,9 @@ export default function CustomOrders() {
             <div className="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center mx-auto mb-3 text-sm font-bold">
               1
             </div>
-            <h3 className="font-bold mb-2">Upload Design</h3>
+            <h3 className="font-bold mb-2">Sube tu diseño</h3>
             <p className="text-sm text-gray-600">
-              Send us your design file or describe your vision
+              Envíanos tu archivo de diseño o describe tu idea
             </p>
           </div>
 
@@ -41,9 +41,9 @@ export default function CustomOrders() {
             <div className="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center mx-auto mb-3 text-sm font-bold">
               2
             </div>
-            <h3 className="font-bold mb-2">Get Quote</h3>
+            <h3 className="font-bold mb-2">Recibe cotización</h3>
             <p className="text-sm text-gray-600">
-              Receive a detailed quote within 24 hours
+              Recibe una cotización detallada en 24 horas
             </p>
           </div>
 
@@ -54,9 +54,9 @@ export default function CustomOrders() {
             <div className="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center mx-auto mb-3 text-sm font-bold">
               3
             </div>
-            <h3 className="font-bold mb-2">We Create</h3>
+            <h3 className="font-bold mb-2">Nosotros creamos</h3>
             <p className="text-sm text-gray-600">
-              Your design is precision laser-cut to perfection
+              Tu diseño se corta con láser con máxima precisión
             </p>
           </div>
 
@@ -67,45 +67,45 @@ export default function CustomOrders() {
             <div className="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center mx-auto mb-3 text-sm font-bold">
               4
             </div>
-            <h3 className="font-bold mb-2">Fast Delivery</h3>
+            <h3 className="font-bold mb-2">Entrega rápida</h3>
             <p className="text-sm text-gray-600">
-              Receive your custom items quickly and safely
+              Recibe tus productos personalizados de forma rápida y segura
             </p>
           </div>
         </div>
 
         {/* Request Form */}
         <div className="max-w-3xl mx-auto bg-white rounded-xl shadow-md p-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">Request a Custom Order</h2>
+          <h2 className="text-2xl font-bold text-gray-900 mb-6">Solicitar pedido personalizado</h2>
           
           <form className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Your Name *
+                  Tu nombre *
                 </label>
                 <input
                   type="text"
                   className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-600"
-                  placeholder="John Doe"
+                  placeholder="Juan Pérez"
                 />
               </div>
 
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Email Address *
+                  Correo electrónico *
                 </label>
                 <input
                   type="email"
                   className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-600"
-                  placeholder="john@example.com"
+                  placeholder="juan@ejemplo.com"
                 />
               </div>
             </div>
 
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-2">
-                Phone Number
+                Número de teléfono
               </label>
               <input
                 type="tel"
@@ -116,52 +116,49 @@ export default function CustomOrders() {
 
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-2">
-                Material Type *
+                Tipo de material *
               </label>
               <select className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-600">
-                <option>Select material</option>
-                <option>MDF (Wood)</option>
-                <option>Clear Acrylic</option>
-                <option>Colored Acrylic</option>
-                <option>Birch Plywood</option>
-                <option>Other (specify in description)</option>
+                <option>Selecciona material</option>
+                <option>MDF (Madera)</option>
+                <option>Otro (especificar en la descripción)</option>
               </select>
             </div>
 
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-2">
-                Quantity *
+                Cantidad *
               </label>
               <input
                 type="number"
                 className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-600"
-                placeholder="10"
+                placeholder="1 - ∞"
                 min="1"
               />
             </div>
 
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-2">
-                Project Description *
+                Descripción del proyecto *
               </label>
               <textarea
                 rows={6}
                 className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-600 resize-none"
-                placeholder="Please describe your custom design requirements, dimensions, and any special instructions..."
+                placeholder="Describe los requisitos de tu diseño personalizado, dimensiones y cualquier instrucción especial..."
               />
             </div>
 
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-2">
-                Upload Design Files
+                Subir archivos de diseño
               </label>
               <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-blue-600 transition-colors cursor-pointer">
                 <Upload className="w-12 h-12 text-gray-400 mx-auto mb-3" />
                 <p className="text-gray-600 mb-1">
-                  Click to upload or drag and drop
+                  Haz clic para subir o arrastra y suelta
                 </p>
                 <p className="text-sm text-gray-500">
-                  SVG, PDF, AI, PNG, or JPG (MAX. 10MB)
+                  SVG, PDF, AI, PNG o JPG (MÁX. 10MB)
                 </p>
               </div>
             </div>
@@ -170,35 +167,35 @@ export default function CustomOrders() {
               type="submit"
               className="w-full bg-blue-600 hover:bg-blue-700 text-white py-4 rounded-lg font-semibold transition-colors shadow-lg"
             >
-              Submit Custom Order Request
+              Enviar solicitud de pedido personalizado
             </button>
           </form>
 
           <p className="text-sm text-gray-500 text-center mt-4">
-            * Required fields. We'll respond to your request within 24 hours.
+          Responderemos a tu solicitud dentro de 24 horas.
           </p>
         </div>
 
         {/* Info Section */}
         <div className="max-w-3xl mx-auto mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="bg-blue-50 rounded-lg p-6 text-center">
-            <h3 className="font-bold text-blue-900 mb-2">No Minimum Order</h3>
+            <h3 className="font-bold text-blue-900 mb-2">Sin pedido mínimo</h3>
             <p className="text-sm text-blue-800">
-              Order as few or as many as you need
+              Pide desde una pieza o las que necesites
             </p>
           </div>
 
           <div className="bg-blue-50 rounded-lg p-6 text-center">
-            <h3 className="font-bold text-blue-900 mb-2">Fast Turnaround</h3>
+            <h3 className="font-bold text-blue-900 mb-2">Entrega rápida</h3>
             <p className="text-sm text-blue-800">
-              Most orders ship within 3-5 business days
+              La mayoría de pedidos se envían en 3-5 días hábiles
             </p>
           </div>
 
           <div className="bg-blue-50 rounded-lg p-6 text-center">
-            <h3 className="font-bold text-blue-900 mb-2">Expert Support</h3>
+            <h3 className="font-bold text-blue-900 mb-2">Asesoría experta</h3>
             <p className="text-sm text-blue-800">
-              Our team helps refine your design
+              Nuestro equipo te ayuda a mejorar tu diseño
             </p>
           </div>
         </div>

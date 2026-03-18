@@ -7,11 +7,11 @@ export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   
   const navLinks = [
-    { name: "Home", path: "/" },
-    { name: "Shop", path: "/shop" },
-    { name: "Categories", path: "/categories" },
-    { name: "Pedidos personalizados", path: "/custom-orders" },
-    { name: "Contact", path: "/contact" },
+    { name: "Inicio", path: "/" },
+    { name: "Ventas", path: "/shop" },
+    { name: "Productos", path: "/categories" },
+    { name: "Órdenes personalizadas", path: "/custom-orders" },
+    { name: "Contactos", path: "/contact" },
   ];
 
   const isActive = (path: string) => {

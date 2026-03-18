@@ -3,7 +3,7 @@ import { Link } from "react-router";
 export default function Categories() {
   const categories = [
     {
-      name: "MDF Shapes",
+      name: "MDF MARCO",
       description: "Versatile wooden shapes perfect for painting, decorating, and crafting",
       image: "https://images.unsplash.com/photo-1584736173347-6066a69d0cd8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx3b29kZW4lMjBjcmFmdCUyMHNoYXBlcyUyMGxhc2VyJTIwY3V0fGVufDF8fHx8MTc3Mzg0ODY1NXww&ixlib=rb-4.1.0&q=80&w=1080",
       count: 150,
@@ -45,8 +45,8 @@ export default function Categories() {
       {/* Header */}
       <div className="bg-gradient-to-r from-blue-600 to-blue-400 text-white py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h1 className="text-4xl font-bold mb-2">Browse Categories</h1>
-          <p className="text-blue-50">Find exactly what you need for your next project</p>
+          <h1 className="text-4xl font-bold mb-2">Ver articulos</h1>
+   <p className="text-blue-50">Encuentra todo lo que necesitas para dar vida a tus ideas y crear proyectos únicos con la mejor calidad y precisión</p>
         </div>
       </div>
 
@@ -84,15 +84,15 @@ export default function Categories() {
       {/* CTA Section */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="bg-gradient-to-r from-blue-600 to-blue-400 rounded-2xl p-8 md:p-12 text-center text-white">
-          <h2 className="text-3xl font-bold mb-4">Can't Find What You're Looking For?</h2>
-          <p className="text-blue-50 mb-6 max-w-2xl mx-auto">
-            We offer custom design services! Let us create the perfect shapes and sizes for your unique project.
-          </p>
+<h2 className="text-3xl font-bold mb-4">¿No encuentras lo que buscas?</h2>
+<p className="text-blue-50 mb-6 max-w-2xl mx-auto">
+  ¡Ofrecemos servicios de diseño personalizado! Déjanos crear las formas y tamaños perfectos para tu proyecto único.
+</p>
           <Link
             to="/custom-orders"
             className="inline-block bg-white text-blue-600 px-8 py-4 rounded-full font-semibold hover:bg-blue-50 transition-colors shadow-lg"
           >
-            Request Custom Order
+            Ordenar ahora
           </Link>
         </div>
       </div>
