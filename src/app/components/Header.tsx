@@ -24,11 +24,11 @@ export default function Header() {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2">
-            <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-blue-400 rounded-lg flex items-center justify-center">
+            <div className="w-10 h-10 bg-gradient-to-br from-red-600 to-blue-400 rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-xl">CS</span>
             </div>
             <span className="font-bold text-xl text-gray-900 hidden sm:block">
-              CraftShapes
+              Laserbeamx
             </span>
           </Link>
 
@@ -56,7 +56,7 @@ export default function Header() {
               <Search className="w-4 h-4 text-gray-400" />
               <input
                 type="text"
-                placeholder="Search products..."
+                placeholder="Buscar productos..."
                 className="bg-transparent border-none outline-none ml-2 w-full text-sm"
               />
             </div>
@@ -70,12 +70,12 @@ export default function Header() {
             <button className="relative p-2 hover:bg-gray-100 rounded-full">
               <ShoppingCart className="w-5 h-5 text-gray-700" />
               <span className="absolute -top-1 -right-1 bg-blue-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                3
+                0
               </span>
             </button>
 
             {/* Account */}
-            <button className="p-2 hover:bg-gray-100 rounded-full">
+            <button className="p-2 hover:bg-gray-300 rounded-full">
               <User className="w-5 h-5 text-gray-700" />
             </button>
 

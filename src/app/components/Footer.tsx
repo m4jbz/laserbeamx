@@ -6,76 +6,66 @@ export default function Footer() {
     <footer className="bg-slate-900 text-white mt-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          {/* Brand */}
+          {/* Marca */}
           <div className="space-y-4">
             <div className="flex items-center space-x-2">
               <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-blue-400 rounded-lg flex items-center justify-center">
                 <span className="text-white font-bold text-xl">CS</span>
               </div>
-              <span className="font-bold text-xl">CraftShapes</span>
+              <span className="font-bold text-xl">Laserbeamx</span>
             </div>
             <p className="text-gray-400 text-sm">
-              Premium laser-cut craft supplies for creative minds.
+            Calidad profesional en cada pieza para que solo te preocupes por crear.
             </p>
           </div>
 
-          {/* Shop */}
+          {/* Tienda */}
           <div>
-            <h3 className="font-semibold mb-4">Shop</h3>
+            <h3 className="font-semibold mb-4">Tienda</h3>
             <ul className="space-y-2 text-sm">
               <li>
                 <Link to="/shop" className="text-gray-400 hover:text-white transition-colors">
-                  All Products
+                  Todos los productos
                 </Link>
               </li>
               <li>
                 <Link to="/categories" className="text-gray-400 hover:text-white transition-colors">
-                  MDF Shapes
+                  Cajas
                 </Link>
               </li>
               <li>
                 <Link to="/categories" className="text-gray-400 hover:text-white transition-colors">
-                  Acrylic Blanks
-                </Link>
-              </li>
-              <li>
-                <Link to="/categories" className="text-gray-400 hover:text-white transition-colors">
-                  Keychains
+                  Llaveros
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Customer Service */}
+          {/* Servicio al Cliente */}
           <div>
-            <h3 className="font-semibold mb-4">Customer Service</h3>
+            <h3 className="font-semibold mb-4">Servicio al Cliente</h3>
             <ul className="space-y-2 text-sm">
               <li>
                 <Link to="/contact" className="text-gray-400 hover:text-white transition-colors">
-                  Contact Us
+                  preguntas frecuentes
                 </Link>
               </li>
               <li>
                 <a href="#" className="text-gray-400 hover:text-white transition-colors">
-                  Shipping Info
+                  Información de envío
                 </a>
               </li>
               <li>
                 <a href="#" className="text-gray-400 hover:text-white transition-colors">
-                  Returns
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-gray-400 hover:text-white transition-colors">
-                  FAQ
+                  Contáctanos
                 </a>
               </li>
             </ul>
           </div>
 
-          {/* Social Media */}
+          {/* Redes Sociales */}
           <div>
-            <h3 className="font-semibold mb-4">Connect With Us</h3>
+            <h3 className="font-semibold mb-4">Conéctate con nosotros</h3>
             <div className="flex space-x-4">
               <a
                 href="#"
@@ -83,15 +73,18 @@ export default function Footer() {
               >
                 <Facebook className="w-5 h-5" />
               </a>
+             <a
+  href="https://www.instagram.com/_manualidades_ss/?hl=es-es"
+  target="_blank"
+  rel="noopener noreferrer"
+  className="w-10 h-10 bg-slate-800 hover:bg-pink-600 rounded-full flex items-center justify-center transition-colors"
+  title="Síguenos en Instagram"
+>
+  <Instagram className="w-5 h-5" />
+</a>
               <a
                 href="#"
-                className="w-10 h-10 bg-slate-800 hover:bg-blue-600 rounded-full flex items-center justify-center transition-colors"
-              >
-                <Instagram className="w-5 h-5" />
-              </a>
-              <a
-                href="#"
-                className="w-10 h-10 bg-slate-800 hover:bg-blue-600 rounded-full flex items-center justify-center transition-colors"
+                className="w-10 h-10 bg-slate-800 hover:bg-red-600 rounded-full flex items-center justify-center transition-colors"
               >
                 <Twitter className="w-5 h-5" />
               </a>
@@ -105,9 +98,9 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Bottom Bar */}
+        {/* Barra Inferior */}
         <div className="border-t border-slate-800 mt-8 pt-8 text-center text-sm text-gray-400">
-          <p>&copy; 2026 CraftShapes Direct. All rights reserved.</p>
+          <p>&copy; 2026 Laserbeamx. Todos los derechos reservados.</p>
         </div>
       </div>
     </footer>

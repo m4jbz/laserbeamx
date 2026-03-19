@@ -18,7 +18,7 @@ export default function Home() {
               Materiales de alta calidad y corte láser preciso para tus proyectos creativos y personalizados.
             </p>
             <Link
-              to="/custom-orders"
+              to="/contact"
               className="inline-flex items-center bg-white text-blue-600 px-8 py-4 rounded-full font-semibold hover:bg-blue-50 transition-colors shadow-lg"
             >
               Contáctanos
