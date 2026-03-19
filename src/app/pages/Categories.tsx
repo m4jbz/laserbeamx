@@ -5,7 +5,7 @@ export default function Categories() {
     {
       name: "MDF MARCO",
       description: "Versatile wooden shapes perfect for painting, decorating, and crafting",
-      image: "/public/assets/asador.jpg",
+      image: "./assets/asador.jpg",
       count: 150,
     },
     {
