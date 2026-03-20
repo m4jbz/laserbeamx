@@ -2,7 +2,7 @@ import { Scissors, Upload, MessageSquare, CheckCircle } from "lucide-react";
 
 export default function CustomOrders() {
   return (
-    <div className="min-h-screen bg-gray-200">   {/* color de fondo de la página */}
+    <div className="min-h-screen bg-gray-50">   {/* color de fondo de la página */}
       {/* Header */}
       <div className="bg-gradient-to-r from-blue-600 to-blue-600 text-white py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

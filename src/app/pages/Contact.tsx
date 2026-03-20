@@ -26,7 +26,7 @@ export default function Contact() {
                     Por lo general respondemos dentro de 24 horas.
                   </p>
                   <a
-                    href="mailto:hello@craftshapes.com"
+                    href="alanslgado@gmail.com"
                     className="text-blue-600 hover:underline"
                   >
                     alanslgado@gmail.com
@@ -46,7 +46,7 @@ export default function Contact() {
                     Atención al cliente.
                   </p>
                   <a
-                    href="tel:+15551234567"
+                    href="tel:+7701277970"
                     className="text-blue-600 hover:underline"
                   >
                     (770) 127-7970
@@ -89,7 +89,7 @@ export default function Contact() {
           </div>
 
           {/* Contact Form */}
-          <div className="lg:col-span-2 bg-white rounded-xl shadow-md p-8">
+          <div className="lg:col-span-2 bg-gray-100 rounded-xl shadow-md p-8">
             <h2 className="text-2xl font-bold text-gray-900 mb-6">Envianos un mensaje</h2>
             
             <form className="space-y-6">
@@ -185,7 +185,7 @@ export default function Contact() {
   </h2>
   
   <div className="max-w-3xl mx-auto space-y-4">
-    <div className="bg-white rounded-xl shadow-md p-6">
+    <div className="bg-white rounded-xl shadow-md p-6 border border-black">
       <h3 className="font-bold text-gray-900 mb-2">
         ¿Qué tipo de MDF utilizan para manualidades?
       </h3>
@@ -195,7 +195,7 @@ export default function Contact() {
       </p>
     </div>
 
-    <div className="bg-white rounded-xl shadow-md p-6">
+    <div className="bg-white rounded-xl shadow-md p-6 border border-black">
       <h3 className="font-bold text-gray-900 mb-2">
         ¿El MDF se puede pintar fácilmente?
       </h3>
@@ -205,7 +205,7 @@ export default function Contact() {
       </p>
     </div>
 
-    <div className="bg-white rounded-xl shadow-md p-6">
+    <div className="bg-white rounded-xl shadow-md p-6 border border-black">
       <h3 className="font-bold text-gray-900 mb-2">
         ¿Hacen diseños personalizados en MDF?
       </h3>
@@ -215,7 +215,7 @@ export default function Contact() {
       </p>
     </div>
 
-    <div className="bg-white rounded-xl shadow-md p-6">
+    <div className="bg-white rounded-xl shadow-md p-6 border border-black">
       <h3 className="font-bold text-gray-900 mb-2">
         ¿Cómo debo cuidar mis piezas de MDF?
       </h3>
