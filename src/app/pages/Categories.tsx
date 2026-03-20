@@ -3,40 +3,34 @@ import { Link } from "react-router";
 export default function Categories() {
   const categories = [
     {
-      name: "MDF MARCO",
-      description: "Versatile wooden shapes perfect for painting, decorating, and crafting",
+      name: "Dias especiales",
+      description: "Para celebrar momentos únicos con diseños significativos",
       image: "/assets/asador.jpg",
-      count: 150,
     },
     {
       name: "Acrylic Blanks",
-      description: "Clear and colored acrylic pieces for modern craft projects",
+      description: "xx",
       image: "https://images.unsplash.com/photo-1693592401248-c9544518318a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxhY3J5bGljJTIwYmxhbmtzJTIwY3JhZnRpbmd8ZW58MXx8fHwxNzczODQ4NjU1fDA&ixlib=rb-4.1.0&q=80&w=1080",
-      count: 87,
     },
     {
       name: "Keychains",
-      description: "Customizable keychain blanks in various shapes and materials",
+      description: "xdcs",
       image: "https://images.unsplash.com/photo-1562770584-eaf50b017307?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxrZXljaGFpbiUyMGJsYW5rcyUyMGNyYWZ0aW5nfGVufDF8fHx8MTc3Mzg0ODY1Nnww&ixlib=rb-4.1.0&q=80&w=1080",
-      count: 64,
     },
     {
       name: "Seasonal Designs",
-      description: "Holiday and seasonal themed shapes for special occasions",
+      description: "Hcdsc",
       image: "https://images.unsplash.com/photo-1708398243156-844c574c34f5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxsYXNlciUyMGN1dCUyMHdvb2RlbiUyMGRlY29yYXRpb258ZW58MXx8fHwxNzczODQ4NjU3fDA&ixlib=rb-4.1.0&q=80&w=1080",
-      count: 92,
     },
     {
       name: "Letters & Numbers",
-      description: "Alphabet letters and numbers for personalization projects",
+      description: "Adsvfrsv",
       image: "https://images.unsplash.com/photo-1651509245244-6674e242a3c1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxNREYlMjB3b29kJTIwc2hhcGVzJTIwY3JhZnRzfGVufDF8fHx8MTc3Mzg0ODY1Nnww&ixlib=rb-4.1.0&q=80&w=1080",
-      count: 78,
     },
     {
       name: "Craft Supplies",
       description: "Essential tools and accessories for your crafting needs",
       image: "https://images.unsplash.com/photo-1773499129466-b80be4adc319?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjcmFmdCUyMHN1cHBsaWVzJTIwb3JnYW5pemVkfGVufDF8fHx8MTc3Mzg0ODY1N3ww&ixlib=rb-4.1.0&q=80&w=1080",
-      count: 45,
     },
   ];
 
@@ -66,11 +60,8 @@ export default function Categories() {
                   className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
                 />
               </div>
-              <div className="p-6">
                 <div className="flex items-center justify-between mb-2">
                   <h3 className="text-xl font-bold text-gray-900">{category.name}</h3>
-                  <span className="text-sm text-gray-500">{category.count} items</span>
-                </div>
                 <p className="text-gray-600 text-sm mb-4">{category.description}</p>
                 <span className="text-blue-600 font-semibold group-hover:underline">
                   Shop Now →

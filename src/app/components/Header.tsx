@@ -22,16 +22,20 @@ export default function Header() {
     <header className="sticky top-0 z-50 bg-white shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          {/* Logo */}
-          <Link to="/" className="flex items-center space-x-2">
-            <div className="w-10 h-10 bg-gradient-to-br from-red-600 to-blue-400 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-xl">CS</span>
-            </div>
-            <span className="font-bold text-xl text-gray-900 hidden sm:block">
-              Laserbeamx
-            </span>
-          </Link>
 
+{/* Logo */}
+<Link to="/" className="flex items-center space-x-2 group">
+  <div className="w-12 h-12 flex items-center justify-center overflow-hidden">
+    <img 
+      src="/assets/logo-laserbeamx-icon.svg" 
+      alt="Logo Laserbeamx" 
+      className="w-full h-full object-contain scale-150 filter contrast-125"
+    />
+  </div>
+  <span className="font-bold text-xl text-gray-900 group-hover:text-red-600 transition-colors">
+    Laserbeamx
+  </span>
+</Link>
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
             {navLinks.map((link) => (
@@ -41,7 +45,7 @@ export default function Header() {
                 className={`transition-colors ${
                   isActive(link.path)
                     ? "text-blue-600 font-medium"
-                    : "text-gray-700 hover:text-blue-600"
+                    : "text-gray-700 hover:text-blue-900"
                 }`}
               >
                 {link.name}

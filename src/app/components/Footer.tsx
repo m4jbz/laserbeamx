@@ -1,5 +1,5 @@
 import { Link } from "react-router";
-import { Facebook, Instagram, Twitter, Mail } from "lucide-react";
+import { Facebook, Instagram, Mail } from "lucide-react";
 
 export default function Footer() {
   return (
@@ -15,7 +15,7 @@ export default function Footer() {
               <span className="font-bold text-xl">Laserbeamx</span>
             </div>
             <p className="text-gray-400 text-sm">
-            Calidad profesional en cada pieza para que solo te preocupes por crear.
+              Calidad profesional en cada pieza para que solo te preocupes por crear.
             </p>
           </div>
 
@@ -47,7 +47,7 @@ export default function Footer() {
             <ul className="space-y-2 text-sm">
               <li>
                 <Link to="/contact" className="text-gray-400 hover:text-white transition-colors">
-                  preguntas frecuentes
+                  Preguntas frecuentes
                 </Link>
               </li>
               <li>
@@ -56,9 +56,9 @@ export default function Footer() {
                 </a>
               </li>
               <li>
-                <a href="#" className="text-gray-400 hover:text-white transition-colors">
+                <Link to="/contact" className="text-gray-400 hover:text-white transition-colors">
                   Contáctanos
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
@@ -70,27 +70,23 @@ export default function Footer() {
               <a
                 href="#"
                 className="w-10 h-10 bg-slate-800 hover:bg-blue-600 rounded-full flex items-center justify-center transition-colors"
+                title="Facebook no disponible"
               >
                 <Facebook className="w-5 h-5" />
               </a>
-             <a
-  href="https://www.instagram.com/_manualidades_ss/?hl=es-es"
-  target="_blank"
-  rel="noopener noreferrer"
-  className="w-10 h-10 bg-slate-800 hover:bg-pink-600 rounded-full flex items-center justify-center transition-colors"
-  title="Síguenos en Instagram"
->
-  <Instagram className="w-5 h-5" />
-</a>
               <a
-                href="#"
-                className="w-10 h-10 bg-slate-800 hover:bg-red-600 rounded-full flex items-center justify-center transition-colors"
+                href="https://www.instagram.com/_manualidades_ss/?hl=es-es"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-10 h-10 bg-slate-800 hover:bg-pink-600 rounded-full flex items-center justify-center transition-colors"
+                title="Síguenos en Instagram"
               >
-                <Twitter className="w-5 h-5" />
+                <Instagram className="w-5 h-5" />
               </a>
               <a
-                href="#"
+                href="mailto:alanslgado@gmail.com"
                 className="w-10 h-10 bg-slate-800 hover:bg-blue-600 rounded-full flex items-center justify-center transition-colors"
+                title="Envianos un correo"
               >
                 <Mail className="w-5 h-5" />
               </a>
