@@ -19,21 +19,21 @@ export default function Shop() {
   });
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="bg-gradient-to-r from-blue-600 to-blue-600 text-white py-12">
+    <div className="min-h-screen bg-[#0B0C14]">
+      <div className="bg-gradient-to-r from-rose-900 to-rose-800 text-white py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h1 className="text-4xl font-bold mb-2">Tienda de Productos</h1>
-          <p className="text-blue-50">Explora nuestra colección completa</p>
+          <p className="text-rose-200">Explora nuestra colección completa</p>
         </div>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex gap-8">
           <aside className="hidden lg:block w-64 flex-shrink-0">
-            <div className="bg-white rounded-xl shadow-md p-6 sticky top-24">
-              <h3 className="font-bold text-lg mb-4">Filtros</h3>
+            <div className="bg-gray-900/50 border border-gray-800 rounded-xl shadow-md p-6 sticky top-24">
+              <h3 className="font-bold text-lg mb-4 text-white">Filtros</h3>
               <div>
-                <h4 className="font-semibold text-sm text-gray-700 mb-3">Rango de Precio</h4>
+                <h4 className="font-semibold text-sm text-gray-300 mb-3">Rango de Precio</h4>
                 <div className="space-y-2">
                   {[
                     { value: "all",      label: "Todos los precios" },
@@ -48,9 +48,9 @@ export default function Shop() {
                         value={range.value}
                         checked={priceRange === range.value}
                         onChange={(e) => setPriceRange(e.target.value)}
-                        className="w-4 h-4 text-blue-600"
+                        className="w-4 h-4 text-rose-700 accent-rose-700"
                       />
-                      <span className="ml-2 text-sm text-gray-700">{range.label}</span>
+                      <span className="ml-2 text-sm text-gray-300">{range.label}</span>
                     </label>
                   ))}
                 </div>
@@ -61,7 +61,7 @@ export default function Shop() {
           <div className="flex-1">
             {isLoading && (
               <div className="text-center py-16">
-                <p className="text-gray-500 text-lg">Cargando productos...</p>
+                <p className="text-gray-400 text-lg">Cargando productos...</p>
               </div>
             )}
 
@@ -74,7 +74,7 @@ export default function Shop() {
             {!isLoading && !isError && (
               <>
                 <div className="mb-6">
-                  <p className="text-gray-600 font-medium">
+                  <p className="text-gray-400 font-medium">
                     Mostrando {filteredProducts.length} productos
                   </p>
                 </div>
@@ -92,8 +92,8 @@ export default function Shop() {
 
                 {filteredProducts.length === 0 && (
                   <div className="text-center py-16 w-full">
-                    <div className="bg-white rounded-2xl p-12 shadow-sm border border-gray-100">
-                      <p className="text-gray-600 text-xl font-semibold">
+                    <div className="bg-gray-900/50 rounded-2xl p-12 shadow-sm border border-gray-800">
+                      <p className="text-white text-xl font-semibold">
                         Sin existencias disponibles
                       </p>
                       <p className="text-gray-400 mt-2">

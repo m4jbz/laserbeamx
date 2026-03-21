@@ -4,13 +4,13 @@ import { Facebook, Instagram, Mail } from "lucide-react";
 export default function Footer() {
   return (
     
-    <footer className="bg-slate-900 text-white">
+    <footer className="bg-[#0B0C14] text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Marca */}
           <div className="space-y-4">
             <div className="flex items-center space-x-2">
-              <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-blue-400 rounded-lg flex items-center justify-center">
+              <div className="w-10 h-10 bg-gradient-to-br from-rose-800 to-rose-700 rounded-lg flex items-center justify-center">
                 <span className="text-white font-bold text-xl">CS</span>
               </div>
               <span className="font-bold text-xl">Laserbeamx</span>
@@ -70,7 +70,7 @@ export default function Footer() {
             <div className="flex space-x-4">
               <a
                 href="#"
-                className="w-10 h-10 bg-slate-800 hover:bg-blue-600 rounded-full flex items-center justify-center transition-colors"
+                className="w-10 h-10 bg-gray-800 hover:bg-rose-800 rounded-full flex items-center justify-center transition-colors"
                 title="Facebook no disponible"
               >
                 <Facebook className="w-5 h-5" />
@@ -79,14 +79,14 @@ export default function Footer() {
                 href="https://www.instagram.com/_manualidades_ss/?hl=es-es"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-10 h-10 bg-slate-800 hover:bg-pink-600 rounded-full flex items-center justify-center transition-colors"
+                className="w-10 h-10 bg-gray-800 hover:bg-rose-800 rounded-full flex items-center justify-center transition-colors"
                 title="Síguenos en Instagram"
               >
                 <Instagram className="w-5 h-5" />
               </a>
               <a
                 href="mailto:alanslgado@gmail.com"
-                className="w-10 h-10 bg-slate-800 hover:bg-blue-600 rounded-full flex items-center justify-center transition-colors"
+                className="w-10 h-10 bg-gray-800 hover:bg-rose-800 rounded-full flex items-center justify-center transition-colors"
                 title="Envianos un correo"
               >
                 <Mail className="w-5 h-5" />
@@ -96,7 +96,7 @@ export default function Footer() {
         </div>
 
         {/* Barra Inferior */}
-        <div className="border-t border-slate-800 mt-8 pt-8 text-center text-sm text-gray-400">
+        <div className="border-t border-gray-800 mt-8 pt-8 text-center text-sm text-gray-400">
           <p>&copy; 2026 Laserbeamx. Todos los derechos reservados.</p>
         </div>
       </div>

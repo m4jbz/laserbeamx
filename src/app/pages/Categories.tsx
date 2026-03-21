@@ -35,12 +35,12 @@ export default function Categories() {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[#0B0C14]">
       {/* Header */}
-      <div className="bg-gradient-to-r from-blue-600 to-blue-400 text-white py-12">
+      <div className="bg-gradient-to-r from-rose-900 to-rose-800 text-white py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h1 className="text-4xl font-bold mb-2">Ver articulos</h1>
-   <p className="text-blue-50">Encuentra todo lo que necesitas para dar vida a tus ideas y crear proyectos únicos con la mejor calidad y precisión</p>
+          <p className="text-rose-200">Encuentra todo lo que necesitas para dar vida a tus ideas y crear proyectos únicos con la mejor calidad y precisión</p>
         </div>
       </div>
 
@@ -51,7 +51,7 @@ export default function Categories() {
             <Link
               key={index}
               to="/shop"
-              className="group bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+              className="group bg-gray-900/50 border border-gray-800 rounded-xl shadow-md overflow-hidden hover:shadow-xl hover:shadow-rose-900/20 transition-all duration-300 hover:-translate-y-1"
             >
               <div className="aspect-video overflow-hidden">
                 <img
@@ -60,10 +60,12 @@ export default function Categories() {
                   className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
                 />
               </div>
+              <div className="p-4">
                 <div className="flex items-center justify-between mb-2">
-                  <h3 className="text-xl font-bold text-gray-900">{category.name}</h3>
-                <p className="text-gray-600 text-sm mb-4">{category.description}</p>
-                <span className="text-blue-600 font-semibold group-hover:underline">
+                  <h3 className="text-xl font-bold text-white">{category.name}</h3>
+                </div>
+                <p className="text-gray-400 text-sm mb-4">{category.description}</p>
+                <span className="text-rose-400 font-semibold group-hover:underline">
                   Shop Now →
                 </span>
               </div>
@@ -74,14 +76,14 @@ export default function Categories() {
 
       {/* CTA Section */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="bg-gradient-to-r from-blue-600 to-blue-400 rounded-2xl p-8 md:p-12 text-center text-white">
-<h2 className="text-3xl font-bold mb-4">¿No encuentras lo que buscas?</h2>
-<p className="text-blue-50 mb-6 max-w-2xl mx-auto">
-  ¡Ofrecemos servicios de diseño personalizado! Déjanos crear las formas y tamaños perfectos para tu proyecto único.
-</p>
+        <div className="bg-gradient-to-r from-rose-900 to-rose-800 rounded-2xl p-8 md:p-12 text-center text-white">
+          <h2 className="text-3xl font-bold mb-4">¿No encuentras lo que buscas?</h2>
+          <p className="text-rose-200 mb-6 max-w-2xl mx-auto">
+            ¡Ofrecemos servicios de diseño personalizado! Déjanos crear las formas y tamaños perfectos para tu proyecto único.
+          </p>
           <Link
             to="/custom-orders"
-            className="inline-block bg-white text-blue-600 px-8 py-4 rounded-full font-semibold hover:bg-blue-50 transition-colors shadow-lg"
+            className="inline-block bg-white text-rose-800 px-8 py-4 rounded-full font-semibold hover:bg-gray-100 transition-colors shadow-lg"
           >
             Ordenar ahora
           </Link>

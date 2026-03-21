@@ -9,8 +9,8 @@ interface ProductCardProps {
 
 export default function ProductCard({ image, name, price }: ProductCardProps) {
   return (
-    <div className="group bg-white rounded-xl shadow-md overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-      <div className="aspect-square overflow-hidden bg-gray-100">
+    <div className="group bg-gray-900/50 border border-gray-800 rounded-xl shadow-md overflow-hidden transition-all duration-300 hover:shadow-xl hover:shadow-rose-900/20 hover:-translate-y-1">
+      <div className="aspect-square overflow-hidden bg-gray-800">
         <ImageWithFallback
           src={image}
           alt={name}
@@ -18,12 +18,12 @@ export default function ProductCard({ image, name, price }: ProductCardProps) {
         />
       </div>
       <div className="p-4">
-        <h3 className="font-medium text-gray-900 mb-2">{name}</h3>
+        <h3 className="font-medium text-white mb-2">{name}</h3>
         <div className="flex items-center justify-between">
-          <span className="text-2xl font-bold text-blue-600">
+          <span className="text-2xl font-bold text-amber-400">
             ${price.toFixed(2)}
           </span>
-          <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-full flex items-center space-x-2 transition-colors">
+          <button className="bg-rose-800 hover:bg-rose-700 text-white px-4 py-2 rounded-full flex items-center space-x-2 transition-colors">
             <ShoppingCart className="w-4 h-4" />
             <span className="text-sm">Add</span>
           </button>

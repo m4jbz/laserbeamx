@@ -19,7 +19,7 @@ export default function Header() {
   };
 
   return (
-    <header className="sticky top-0 z-50 bg-white shadow-sm">
+    <header className="sticky top-0 z-50 bg-[#0B0C14] shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
 
@@ -27,12 +27,12 @@ export default function Header() {
 <Link to="/" className="flex items-center space-x-2 group">
   <div className="w-12 h-12 flex items-center justify-center overflow-hidden">
     <img 
-      src="/assets/logo-laserbeamx-icon.svg" 
+      src="/assets/kali.svg" 
       alt="Logo Laserbeamx" 
-      className="w-full h-full object-contain scale-150 filter contrast-125"
+      className="w-full h-full object-contain"
     />
   </div>
-  <span className="font-bold text-xl text-gray-900 group-hover:text-red-600 transition-colors">
+          <span className="font-bold text-xl text-white group-hover:text-rose-400 transition-colors">
     Laserbeamx
   </span>
 </Link>
@@ -44,8 +44,8 @@ export default function Header() {
                 to={link.path}
                 className={`transition-colors ${
                   isActive(link.path)
-                    ? "text-blue-600 font-medium"
-                    : "text-gray-700 hover:text-blue-900"
+                    ? "text-rose-400 font-medium"
+                    : "text-gray-300 hover:text-rose-300"
                 }`}
               >
                 {link.name}
@@ -56,42 +56,42 @@ export default function Header() {
           {/* Right Side Icons */}
           <div className="flex items-center space-x-4">
             {/* Search Bar - Desktop */}
-            <div className="hidden lg:flex items-center bg-gray-100 rounded-full px-4 py-2 w-64">
+            <div className="hidden lg:flex items-center bg-gray-800/50 border border-gray-700 rounded-full px-4 py-2 w-64">
               <Search className="w-4 h-4 text-gray-400" />
               <input
                 type="text"
                 placeholder="Buscar productos..."
-                className="bg-transparent border-none outline-none ml-2 w-full text-sm"
+                className="bg-transparent border-none outline-none ml-2 w-full text-sm text-gray-200 placeholder-gray-500"
               />
             </div>
 
             {/* Search Icon - Mobile */}
-            <button className="lg:hidden p-2 hover:bg-gray-100 rounded-full">
-              <Search className="w-5 h-5 text-gray-700" />
+            <button className="lg:hidden p-2 hover:bg-gray-800 rounded-full">
+              <Search className="w-5 h-5 text-gray-300" />
             </button>
 
             {/* Cart */}
-            <button className="relative p-2 hover:bg-gray-100 rounded-full">
-              <ShoppingCart className="w-5 h-5 text-gray-700" />
-              <span className="absolute -top-1 -right-1 bg-blue-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+            <button className="relative p-2 hover:bg-gray-800 rounded-full">
+              <ShoppingCart className="w-5 h-5 text-gray-300" />
+              <span className="absolute -top-1 -right-1 bg-rose-700 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
                 0
               </span>
             </button>
 
             {/* Account */}
-            <button className="p-2 hover:bg-gray-300 rounded-full">
-              <User className="w-5 h-5 text-gray-700" />
+            <button className="p-2 hover:bg-gray-800 rounded-full">
+              <User className="w-5 h-5 text-gray-300" />
             </button>
 
             {/* Mobile Menu Toggle */}
             <button
-              className="md:hidden p-2 hover:bg-gray-100 rounded-full"
+              className="md:hidden p-2 hover:bg-gray-800 rounded-full"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             >
               {mobileMenuOpen ? (
-                <X className="w-5 h-5 text-gray-700" />
+                <X className="w-5 h-5 text-gray-300" />
               ) : (
-                <Menu className="w-5 h-5 text-gray-700" />
+                <Menu className="w-5 h-5 text-gray-300" />
               )}
             </button>
           </div>
@@ -99,7 +99,7 @@ export default function Header() {
 
         {/* Mobile Menu */}
         {mobileMenuOpen && (
-          <div className="md:hidden py-4 border-t">
+          <div className="md:hidden py-4 border-t border-gray-800">
             <nav className="flex flex-col space-y-3">
               {navLinks.map((link) => (
                 <Link
@@ -108,8 +108,8 @@ export default function Header() {
                   onClick={() => setMobileMenuOpen(false)}
                   className={`px-4 py-2 rounded-lg transition-colors ${
                     isActive(link.path)
-                      ? "bg-blue-50 text-blue-600 font-medium"
-                      : "text-gray-700 hover:bg-gray-50"
+                      ? "bg-rose-900/30 text-rose-400 font-medium"
+                      : "text-gray-300 hover:bg-gray-800"
                   }`}
                 >
                   {link.name}
