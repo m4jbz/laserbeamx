@@ -3,18 +3,23 @@ import { Facebook, Instagram, Mail } from "lucide-react";
 
 export default function Footer() {
   return (
-    
     <footer className="bg-[#0B0C14] text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+
           {/* Marca */}
           <div className="space-y-4">
-            <div className="flex items-center space-x-2">
-              <div className="w-10 h-10 bg-gradient-to-br from-rose-800 to-rose-700 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-xl">CS</span>
-              </div>
+            <div className="flex items-center space-x-3">
+              
+              <img 
+                src="/assets/kali.svg" 
+                alt="Logo Laserbeamx" 
+                className="w-10 h-10 object-contain"
+              />
+
               <span className="font-bold text-xl">Laserbeamx</span>
             </div>
+
             <p className="text-gray-400 text-sm">
               Calidad profesional en cada pieza para que solo te preocupes por crear.
             </p>
@@ -29,37 +34,27 @@ export default function Footer() {
                   Todos los productos
                 </Link>
               </li>
-              <li>
-                <Link to="/categories" className="text-gray-400 hover:text-white transition-colors">
-                  Cajas
-                </Link>
-              </li>
-              <li>
-                <Link to="/categories" className="text-gray-400 hover:text-white transition-colors">
-                  Llaveros
-                </Link>
-              </li>
             </ul>
           </div>
 
           {/* Servicio al Cliente */}
-          <div>
-            <h3 className="font-semibold mb-4">Servicio al Cliente</h3>
-            <ul className="space-y-2 text-sm">
-              <li>
-                <Link to="/contact" className="text-gray-400 hover:text-white transition-colors">
-                  Preguntas frecuentes
-                </Link>
-              </li>
-              <li>
-                <a href="#" className="text-gray-400 hover:text-white transition-colors">
-                  Información de envío
-                </a>
-              </li>
-              <li>
-                <Link to="/contact" className="text-gray-400 hover:text-white transition-colors">
-                  Contáctanos
-                </Link>
+<div>
+     <h3 className="font-semibold mb-4">Servicio al Cliente</h3>
+      <ul className="space-y-2 text-sm">
+       <li>
+        <Link 
+         to="/contact#faq" 
+         className="text-gray-400 hover:text-white transition-colors"
+    >
+          Preguntas frecuentes
+        </Link>
+</li>
+    
+    <li>
+      {/* Contacto */}
+      <Link to="/contact" className="text-gray-400 hover:text-white transition-colors">
+        Contáctanos
+      </Link>
               </li>
             </ul>
           </div>
@@ -75,6 +70,7 @@ export default function Footer() {
               >
                 <Facebook className="w-5 h-5" />
               </a>
+
               <a
                 href="https://www.instagram.com/_manualidades_ss/?hl=es-es"
                 target="_blank"
@@ -84,15 +80,17 @@ export default function Footer() {
               >
                 <Instagram className="w-5 h-5" />
               </a>
+
               <a
                 href="mailto:alanslgado@gmail.com"
                 className="w-10 h-10 bg-gray-800 hover:bg-rose-800 rounded-full flex items-center justify-center transition-colors"
-                title="Envianos un correo"
+                title="Envíanos un correo"
               >
                 <Mail className="w-5 h-5" />
               </a>
             </div>
           </div>
+
         </div>
 
         {/* Barra Inferior */}

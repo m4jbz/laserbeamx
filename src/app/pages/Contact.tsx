@@ -124,7 +124,7 @@ export default function Contact() {
                 <input
                   type="email"
                   className="w-full px-4 py-3 rounded-lg border border-gray-700 focus:outline-none focus:ring-2 focus:ring-rose-800 bg-gray-800 text-white placeholder-gray-500"
-                  placeholder="john@example.com"
+                  placeholder="pedrooleasantana@gmail.com"
                 />
               </div>
 
@@ -179,9 +179,11 @@ export default function Contact() {
         </div>
 
         {/* FAQ Section */}
-        <div className="mt-16">
+        <div id="faq"  className="mt-16">
           <h2 className="text-3xl font-bold text-white text-center mb-8">
+    
             Preguntas Frecuentes
+            
           </h2>
           
           <div className="max-w-3xl mx-auto space-y-4">

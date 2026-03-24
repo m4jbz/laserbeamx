@@ -1,15 +1,21 @@
-import { useEffect } from "react"; 
-import { Outlet, useLocation } from "react-router"; 
+import { useEffect } from "react";
+import { Outlet, useLocation } from "react-router";
 import Header from "./Header";
 import Footer from "./Footer";
 
 export default function Layout() {
-  const { pathname } = useLocation();  // Obtiene la ruta actual
+  const { pathname, hash } = useLocation(); 
 
-  // cambia y sube el scroll
   useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [pathname]);
+    if (hash) {
+      const element = document.getElementById(hash.replace("#", ""));
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+      }
+    } else {
+      window.scrollTo(0, 0);
+    }
+  }, [pathname, hash]);
 
   return (
     <div className="min-h-screen flex flex-col">

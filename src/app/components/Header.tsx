@@ -6,10 +6,10 @@ export default function Header() {
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   
+  // Hemos eliminado la línea de "Productos" para evitar el error 404
   const navLinks = [
     { name: "Inicio", path: "/" },
     { name: "Ventas", path: "/shop" },
-    { name: "Productos", path: "/categories" },
     { name: "Órdenes personalizadas", path: "/custom-orders" },
     { name: "Contactos", path: "/contact" },
   ];
@@ -23,19 +23,20 @@ export default function Header() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
 
-{/* Logo */}
-<Link to="/" className="flex items-center space-x-2 group">
-  <div className="w-12 h-12 flex items-center justify-center overflow-hidden">
-    <img 
-      src="/assets/kali.svg" 
-      alt="Logo Laserbeamx" 
-      className="w-full h-full object-contain"
-    />
-  </div>
-          <span className="font-bold text-xl text-white group-hover:text-rose-400 transition-colors">
-    Laserbeamx
-  </span>
-</Link>
+          {/* Logo */}
+          <Link to="/" className="flex items-center space-x-2 group">
+            <div className="w-12 h-12 flex items-center justify-center overflow-hidden">
+              <img 
+                src="/assets/kali.svg" 
+                alt="Logo Laserbeamx" 
+                className="w-full h-full object-contain"
+              />
+            </div>
+            <span className="font-bold text-xl text-white group-hover:text-rose-400 transition-colors">
+              Laserbeamx
+            </span>
+          </Link>
+
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
             {navLinks.map((link) => (
@@ -65,12 +66,11 @@ export default function Header() {
               />
             </div>
 
-            {/* Search Icon - Mobile */}
+            {/* Icons... (Mantenemos el resto igual) */}
             <button className="lg:hidden p-2 hover:bg-gray-800 rounded-full">
               <Search className="w-5 h-5 text-gray-300" />
             </button>
 
-            {/* Cart */}
             <button className="relative p-2 hover:bg-gray-800 rounded-full">
               <ShoppingCart className="w-5 h-5 text-gray-300" />
               <span className="absolute -top-1 -right-1 bg-rose-700 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
@@ -78,12 +78,10 @@ export default function Header() {
               </span>
             </button>
 
-            {/* Account */}
             <button className="p-2 hover:bg-gray-800 rounded-full">
               <User className="w-5 h-5 text-gray-300" />
             </button>
 
-            {/* Mobile Menu Toggle */}
             <button
               className="md:hidden p-2 hover:bg-gray-800 rounded-full"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
