@@ -1,12 +1,14 @@
 import { Link, useLocation } from "react-router";
 import { Search, ShoppingCart, User, Menu, X } from "lucide-react";
+import { useCart } from "../context/CartContext"; // Importar useCart
 import { useState } from "react";
 
 export default function Header() {
+  const { getTotalItems } = useCart(); // Obtener el total de items del carrito
+  const totalItems = getTotalItems();
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   
-  // Hemos eliminado la línea de "Productos" para evitar el error 404
   const navLinks = [
     { name: "Inicio", path: "/" },
     { name: "Ventas", path: "/shop" },
@@ -66,22 +68,27 @@ export default function Header() {
               />
             </div>
 
-            {/* Icons... (Mantenemos el resto igual) */}
+            {/* Search Button - Mobile */}
             <button className="lg:hidden p-2 hover:bg-gray-800 rounded-full">
               <Search className="w-5 h-5 text-gray-300" />
             </button>
 
-            <button className="relative p-2 hover:bg-gray-800 rounded-full">
+            {/* Shopping Cart Icon */}
+            <Link to="/checkout" className="relative p-2 hover:bg-gray-800 rounded-full">
               <ShoppingCart className="w-5 h-5 text-gray-300" />
-              <span className="absolute -top-1 -right-1 bg-rose-700 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                0
-              </span>
-            </button>
+              {totalItems > 0 && (
+                <span className="absolute -top-1 -right-1 bg-rose-700 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                  {totalItems}
+                </span>
+              )}
+            </Link>
 
+            {/* User Icon */}
             <button className="p-2 hover:bg-gray-800 rounded-full">
               <User className="w-5 h-5 text-gray-300" />
             </button>
 
+            {/* Mobile Menu Toggle */}
             <button
               className="md:hidden p-2 hover:bg-gray-800 rounded-full"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
