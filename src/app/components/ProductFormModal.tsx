@@ -2,7 +2,7 @@ import { useState, useCallback, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { useDropzone } from 'react-dropzone'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { Upload, X, Loader2, Image as ImageIcon } from 'lucide-react'
+import { Upload, X, Loader2, Image as ImageIcon, RefreshCw } from 'lucide-react'
 
 import {
   Dialog,
@@ -205,12 +205,32 @@ export function ProductFormModal({ open, onOpenChange, product }: Props) {
           {/* Imagen Dropzone */}
           <div className="space-y-2">
             <Label>Imagen del producto</Label>
-            {imagePreview ? (
+            {imagePreview && !imageFile ? (
+              // Imagen existente (en modo edición) - permite hacer clic para cambiar
+              <div
+                {...getRootProps()}
+                className="relative cursor-pointer group"
+              >
+                <input {...getInputProps()} />
+                <img
+                  src={imagePreview}
+                  alt="Preview"
+                  className="w-full h-48 object-cover rounded-lg border border-gray-700 group-hover:opacity-70 transition-opacity"
+                />
+                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                  <div className="bg-black/70 px-4 py-2 rounded-lg flex items-center gap-2">
+                    <RefreshCw className="h-5 w-5" />
+                    <span>Cambiar imagen</span>
+                  </div>
+                </div>
+              </div>
+            ) : imagePreview && imageFile ? (
+              // Nueva imagen seleccionada (preview del archivo nuevo)
               <div className="relative">
                 <img
                   src={imagePreview}
                   alt="Preview"
-                  className="w-full h-48 object-cover rounded-lg border border-gray-700"
+                  className="w-full h-48 object-cover rounded-lg border border-green-600"
                 />
                 <Button
                   type="button"
@@ -218,16 +238,16 @@ export function ProductFormModal({ open, onOpenChange, product }: Props) {
                   size="icon"
                   className="absolute top-2 right-2"
                   onClick={removeImage}
+                  title={isEditing ? "Volver a imagen original" : "Quitar imagen"}
                 >
                   <X className="h-4 w-4" />
                 </Button>
-                {imageFile && (
-                  <span className="absolute bottom-2 left-2 bg-black/70 text-xs px-2 py-1 rounded">
-                    Nueva imagen: {imageFile.name}
-                  </span>
-                )}
+                <span className="absolute bottom-2 left-2 bg-green-900/90 text-green-300 text-xs px-2 py-1 rounded">
+                  Nueva: {imageFile.name}
+                </span>
               </div>
             ) : (
+              // Sin imagen - mostrar dropzone
               <div
                 {...getRootProps()}
                 className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors
@@ -322,6 +342,7 @@ export function ProductFormModal({ open, onOpenChange, product }: Props) {
               variant="outline"
               onClick={() => onOpenChange(false)}
               disabled={isSubmitting}
+              className="bg-[#dd0000]"
             >
               Cancelar
             </Button>

@@ -7,6 +7,7 @@ export type Product = {
   description: string | null
   price: number
   imagePath: string
+  createdAt: string
 }
 
 export type CreateProductDto = {
@@ -22,7 +23,11 @@ export const getProducts = async (): Promise<Product[]> => {
   const res = await fetch(`${API_URL}/products`)
   if (!res.ok) throw new Error('Error al obtener productos')
   const json = await res.json()
-  return json.data.map((p: any) => ({ ...p, price: parseFloat(p.price) }))
+  const products = json.data.map((p: any) => ({ ...p, price: parseFloat(p.price) }))
+  // Ordenar por nombre alfabéticamente
+  return products.sort((a: Product, b: Product) => 
+    a.name.localeCompare(b.name, 'es', { sensitivity: 'base' })
+  )
 }
 
 export const getProductById = async (id: string): Promise<Product> => {
