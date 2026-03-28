@@ -2,12 +2,21 @@
 const API_URL = import.meta.env.VITE_API_URL;
 
 export type Product = {
-  id: number
+  id: string  // UUID from backend
   name: string
   description: string | null
   price: number
   imagePath: string
 }
+
+export type CreateProductDto = {
+  name: string
+  description?: string
+  price: number
+  imagePath: string
+}
+
+export type UpdateProductDto = Partial<CreateProductDto>
 
 export const getProducts = async (): Promise<Product[]> => {
   const res = await fetch(`${API_URL}/products`)
@@ -16,8 +25,47 @@ export const getProducts = async (): Promise<Product[]> => {
   return json.data.map((p: any) => ({ ...p, price: parseFloat(p.price) }))
 }
 
-export const getProductById = async (id: number) => {
+export const getProductById = async (id: string): Promise<Product> => {
   const res = await fetch(`${API_URL}/products/${id}`)
   if (!res.ok) throw new Error('Error al obtener producto')
-  return res.json()
+  const json = await res.json()
+  return { ...json.data, price: parseFloat(json.data.price) }
+}
+
+export const createProduct = async (data: CreateProductDto): Promise<Product> => {
+  const res = await fetch(`${API_URL}/products`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  })
+  if (!res.ok) {
+    const error = await res.json().catch(() => ({}))
+    throw new Error(error.message || 'Error al crear producto')
+  }
+  const json = await res.json()
+  return { ...json.data.product, price: parseFloat(json.data.product.price) }
+}
+
+export const updateProduct = async (id: string, data: UpdateProductDto): Promise<Product> => {
+  const res = await fetch(`${API_URL}/products/${id}`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  })
+  if (!res.ok) {
+    const error = await res.json().catch(() => ({}))
+    throw new Error(error.message || 'Error al actualizar producto')
+  }
+  const json = await res.json()
+  return { ...json.data.updatedProduct, price: parseFloat(json.data.updatedProduct.price) }
+}
+
+export const deleteProduct = async (id: string): Promise<void> => {
+  const res = await fetch(`${API_URL}/products/${id}`, {
+    method: 'DELETE',
+  })
+  if (!res.ok) {
+    const error = await res.json().catch(() => ({}))
+    throw new Error(error.message || 'Error al eliminar producto')
+  }
 }
