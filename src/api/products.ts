@@ -6,7 +6,7 @@ export type Product = {
   name: string
   description: string | null
   price: number
-  image_path: string
+  imagePath: string
 }
 
 export const getProducts = async (): Promise<Product[]> => {

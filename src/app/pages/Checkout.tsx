@@ -97,7 +97,7 @@ export default function Checkout() {
                 {cartItems.map((item) => (
                   <div key={item.id} className="flex items-center justify-between bg-gray-800/50 p-4 rounded-lg border border-gray-700">
                     <div className="flex items-center gap-4">
-                      <img src={item.image_path} alt={item.name} className="w-16 h-16 object-cover rounded-lg" />
+                      <img src={item.imagePath} alt={item.name} className="w-16 h-16 object-cover rounded-lg" />
                       <div>
                         <p className="font-bold text-gray-100">{item.name}</p>
                         <p className="text-rose-400">${item.price.toFixed(2)}</p>

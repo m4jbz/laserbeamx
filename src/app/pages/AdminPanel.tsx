@@ -66,7 +66,7 @@ export default function AdminPanel() {
               {loadingProducts ? <p>Cargando...</p> : products?.map((p: any) => (
                 <div key={p.id} className="flex items-center justify-between p-4 bg-[#111827] rounded-2xl border border-gray-800">
                   <div className="flex items-center gap-4">
-                    <img src={p.image_path} className="w-16 h-16 object-cover rounded-xl" alt={p.name} />
+                    <img src={p.imagePath} className="w-16 h-16 object-cover rounded-xl" alt={p.name} />
                     <div>
                       <p className="font-bold text-lg">{p.name}</p>
                       <p className="text-green-500 font-bold">${p.price.toFixed(2)}</p>
