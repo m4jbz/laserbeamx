@@ -2,6 +2,7 @@
 
 const CODEBERG_TOKEN = import.meta.env.VITE_CODEBERG_TOKEN
 const CODEBERG_REPO = import.meta.env.VITE_CODEBERG_REPO // formato: "usuario/repo"
+const CODEBERG_CUSTOMER_REPO = import.meta.env.VITE_CODEBERG_CUSTOMER_REPO // repo para imágenes de clientes
 
 type CodebergUploadResponse = {
   content: {
@@ -123,6 +124,52 @@ export const getFilenameFromCodebergUrl = (url: string): string | null => {
   } catch {
     return null
   }
+}
+
+/**
+ * Sube una imagen de cliente al repositorio de Codeberg para pedidos personalizados
+ * @param file - Archivo a subir
+ * @returns URL de la imagen subida
+ */
+export const uploadCustomerImageToCodeberg = async (file: File): Promise<string> => {
+  if (!CODEBERG_TOKEN || !CODEBERG_CUSTOMER_REPO) {
+    throw new Error('Faltan variables de entorno: VITE_CODEBERG_TOKEN y/o VITE_CODEBERG_CUSTOMER_REPO')
+  }
+
+  // Generar nombre único con timestamp
+  const timestamp = Date.now()
+  const sanitizedName = file.name
+    .replace(/[^a-zA-Z0-9.-]/g, '_')
+    .toLowerCase()
+  const finalFilename = `${timestamp}_${sanitizedName}`
+
+  // Convertir archivo a base64
+  const base64Content = await fileToBase64(file)
+
+  const apiUrl = `https://codeberg.org/api/v1/repos/${CODEBERG_CUSTOMER_REPO}/contents/${finalFilename}`
+
+  const response = await fetch(apiUrl, {
+    method: 'POST',
+    headers: {
+      'Authorization': `token ${CODEBERG_TOKEN}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      message: `Customer upload: ${finalFilename}`,
+      content: base64Content,
+    }),
+  })
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({}))
+    console.error('Codeberg customer upload error:', error)
+    throw new Error(error.message || `Error al subir imagen: ${response.status}`)
+  }
+
+  // Construir URL raw para acceder a la imagen
+  const rawUrl = `https://codeberg.org/${CODEBERG_CUSTOMER_REPO}/raw/branch/main/${finalFilename}`
+  
+  return rawUrl
 }
 
 // Helper: convertir File a base64
