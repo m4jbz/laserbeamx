@@ -60,7 +60,7 @@ export type Order = {
 export type CreateOrderDto = {
   notes?: string
   clientName: string
-  phoneNumber: string
+  phoneNumber: string  // Formato internacional: +52XXXXXXXXXX
   orderStatus: OrderStatus
   paymentStatus: PaymentStatus
   paymentMethod: PaymentMethod
@@ -183,4 +183,66 @@ export const orderStatusColors: Record<OrderStatus, string> = {
 export const paymentStatusColors: Record<PaymentStatus, string> = {
   [PaymentStatus.PENDING]: 'text-yellow-400',
   [PaymentStatus.PAID]: 'text-green-400',
+}
+
+// ----- WhatsApp helpers -----
+
+const WHATSAPP_PHONE = import.meta.env.VITE_ADMIN_WHATSAPP
+
+/**
+ * Build a WhatsApp message with all order details (sin emojis).
+ */
+export function buildWhatsAppMessage(order: Order): string {
+  const lines: string[] = [
+    `*Nuevo pedido - LaserBeamX*`,
+    ``,
+    `*Ticket:* ${order.ticketNumber}`,
+    `*Cliente:* ${order.clientName}`,
+    `*Telefono:* ${order.phoneNumber}`,
+    ``,
+    `*Productos:*`,
+  ]
+
+  if (order.orderDetail) {
+    for (const d of order.orderDetail) {
+      const productName = d.product?.name || 'Producto'
+      lines.push(`  - ${productName} x${d.quantity} - $${d.unitPrice.toLocaleString('es-MX')} c/u = $${d.subtotal.toLocaleString('es-MX')}`)
+    }
+  }
+
+  lines.push(``)
+  lines.push(`*Total:* $${order.total.toLocaleString('es-MX')} MXN`)
+  lines.push(``)
+
+  if (order.deliveryType === DeliveryType.HOME && order.notes) {
+    lines.push(`*Entrega:* A domicilio`)
+    // La direccion esta en las notas
+    const addressMatch = order.notes.match(/Direccion: (.+?)(\n|$)/i)
+    if (addressMatch) {
+      lines.push(`*Direccion:* ${addressMatch[1]}`)
+    }
+  } else {
+    lines.push(`*Entrega:* Recoger en local`)
+  }
+
+  lines.push(`*Metodo de pago:* ${paymentMethodLabels[order.paymentMethod]}`)
+
+  // Extraer notas sin la direccion
+  if (order.notes) {
+    const cleanNotes = order.notes.replace(/Direccion: .+?(\n|$)/i, '').trim()
+    if (cleanNotes) {
+      lines.push(``)
+      lines.push(`*Notas:* ${cleanNotes}`)
+    }
+  }
+
+  return lines.join('\n')
+}
+
+/**
+ * Get the full WhatsApp URL for an order.
+ */
+export function getWhatsAppUrl(order: Order): string {
+  const message = buildWhatsAppMessage(order)
+  return `https://wa.me/${WHATSAPP_PHONE}?text=${encodeURIComponent(message)}`
 }

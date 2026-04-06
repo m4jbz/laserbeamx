@@ -1,20 +1,26 @@
 import React, { useState } from 'react';
 import { useCart } from '../context/CartContext';
-import { Trash2, Plus, Minus } from 'lucide-react';
-// CAMBIO AQUÍ: Usamos "react-router" en lugar de "react-router-dom"
+import { Trash2, Plus, Minus, Loader2, AlertCircle } from 'lucide-react';
 import { useNavigate } from 'react-router'; 
-import { useOrders } from '../context/OrderContext';
+import { 
+  createOrder, 
+  PaymentMethod, 
+  DeliveryType,
+  OrderStatus,
+  PaymentStatus,
+} from '../../api/orders';
 
 
 export default function Checkout() {
   const { cartItems, removeItem, updateQuantity, getTotalPrice, clearCart } = useCart();
-  const { addOrder } = useOrders(); // Usar addOrder del contexto de pedidos
   const navigate = useNavigate();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   const [customerName, setCustomerName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
-  const [paymentMethod, setPaymentMethod] = useState<'efectivo' | 'en_linea'>('efectivo');
-  const [deliveryType, setDeliveryType] = useState<'local' | 'domicilio'>('local');
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>(PaymentMethod.CASH);
+  const [deliveryType, setDeliveryType] = useState<DeliveryType>(DeliveryType.PLACE);
   const [address, setAddress] = useState({
     street: '',
     number: '',
@@ -34,7 +40,7 @@ export default function Checkout() {
     const errors: any = {};
     if (!customerName.trim()) errors.customerName = 'El nombre del cliente es requerido.';
     if (phoneNumber.length !== 10) errors.phoneNumber = 'El número de teléfono debe tener 10 dígitos.';
-    if (deliveryType === 'domicilio') {
+    if (deliveryType === DeliveryType.HOME) {
       if (!address.street.trim()) errors.street = 'La calle es requerida.';
       if (!address.number.trim()) errors.number = 'El número es requerido.';
       if (!address.colony.trim()) errors.colony = 'La colonia es requerida.';
@@ -44,29 +50,64 @@ export default function Checkout() {
     return Object.keys(errors).length === 0;
   };
 
-  const handleSubmitOrder = (e: React.FormEvent) => {
+  const handleSubmitOrder = async (e: React.FormEvent) => {
     e.preventDefault();
+    setSubmitError(null);
+    
     if (!validateForm()) {
-      alert('Por favor, corrige los errores en el formulario.');
       return;
     }
 
-    const orderDetails = {
-      customerName,
-      phoneNumber,
-      paymentMethod,
-      deliveryType,
-      address: deliveryType === 'domicilio' ? address : null,
-      notes,
-      cartItems: cartItems.map(item => ({ id: item.id, name: item.name, quantity: item.quantity, price: item.price })),
-      total: getTotalPrice(),
-      date: new Date().toISOString(),
-    };
+    setIsSubmitting(true);
 
-    addOrder(orderDetails); // Añadir el pedido al contexto de pedidos
-    alert('Pedido realizado con éxito!');
-    clearCart();
-    navigate('/shop'); // Redirigir a la tienda o a una página de confirmación
+    try {
+      // Construir dirección en las notas si es a domicilio
+      let orderNotes = notes || '';
+      if (deliveryType === DeliveryType.HOME) {
+        const addressStr = `Direccion: ${address.street} #${address.number}, Col. ${address.colony}, ${address.city}${address.references ? ` (Ref: ${address.references})` : ''}`;
+        orderNotes = orderNotes ? `${addressStr}\n\n${orderNotes}` : addressStr;
+      }
+
+      const order = await createOrder({
+        clientName: customerName,
+        phoneNumber: `+52${phoneNumber}`,  // Formato internacional
+        paymentMethod,
+        deliveryType,
+        orderStatus: OrderStatus.PENDING,
+        paymentStatus: PaymentStatus.PENDING,
+        notes: orderNotes || undefined,
+        details: cartItems.map(item => ({ 
+          id: item.id, 
+          quantity: item.quantity 
+        })),
+      });
+
+      // Guardar datos del carrito antes de limpiar para mostrar en confirmación
+      const orderData = {
+        ...order,
+        total: getTotalPrice(), // Usar el total calculado localmente
+        cartItems: cartItems.map(item => ({
+          name: item.name,
+          quantity: item.quantity,
+          price: item.price,
+          subtotal: item.price * item.quantity,
+        })),
+        deliveryType,
+        paymentMethod,
+        clientName: customerName,
+        phoneNumber: `+52${phoneNumber}`,
+      };
+
+      clearCart();
+      
+      // Navegar a la página de confirmación con los datos del pedido
+      navigate('/order-confirmation', { state: { order: orderData } });
+    } catch (error) {
+      console.error('Error al crear pedido:', error);
+      setSubmitError(error instanceof Error ? error.message : 'Error al procesar tu pedido. Por favor intenta de nuevo.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const totalPrice = getTotalPrice();
@@ -168,9 +209,9 @@ export default function Checkout() {
                       <input
                         type="radio"
                         name="paymentMethod"
-                        value="efectivo"
-                        checked={paymentMethod === 'efectivo'}
-                        onChange={() => setPaymentMethod('efectivo')}
+                        value={PaymentMethod.CASH}
+                        checked={paymentMethod === PaymentMethod.CASH}
+                        onChange={() => setPaymentMethod(PaymentMethod.CASH)}
                         className="form-radio text-rose-600"
                       />
                       <span className="ml-2 text-gray-300">Efectivo</span>
@@ -179,12 +220,12 @@ export default function Checkout() {
                       <input
                         type="radio"
                         name="paymentMethod"
-                        value="en_linea"
-                        checked={paymentMethod === 'en_linea'}
-                        onChange={() => setPaymentMethod('en_linea')}
+                        value={PaymentMethod.TRANSFER}
+                        checked={paymentMethod === PaymentMethod.TRANSFER}
+                        onChange={() => setPaymentMethod(PaymentMethod.TRANSFER)}
                         className="form-radio text-rose-600"
                       />
-                      <span className="ml-2 text-gray-300">Pago en Línea</span>
+                      <span className="ml-2 text-gray-300">Transferencia</span>
                     </label>
                   </div>
                 </div>
@@ -196,9 +237,9 @@ export default function Checkout() {
                       <input
                         type="radio"
                         name="deliveryType"
-                        value="local"
-                        checked={deliveryType === 'local'}
-                        onChange={() => setDeliveryType('local')}
+                        value={DeliveryType.PLACE}
+                        checked={deliveryType === DeliveryType.PLACE}
+                        onChange={() => setDeliveryType(DeliveryType.PLACE)}
                         className="form-radio text-rose-600"
                       />
                       <span className="ml-2 text-gray-300">Recoger en Local</span>
@@ -207,9 +248,9 @@ export default function Checkout() {
                       <input
                         type="radio"
                         name="deliveryType"
-                        value="domicilio"
-                        checked={deliveryType === 'domicilio'}
-                        onChange={() => setDeliveryType('domicilio')}
+                        value={DeliveryType.HOME}
+                        checked={deliveryType === DeliveryType.HOME}
+                        onChange={() => setDeliveryType(DeliveryType.HOME)}
                         className="form-radio text-rose-600"
                       />
                       <span className="ml-2 text-gray-300">Servicio a Domicilio (Costo Extra)</span>
@@ -217,7 +258,7 @@ export default function Checkout() {
                   </div>
                 </div>
 
-                {deliveryType === 'domicilio' && (
+                {deliveryType === DeliveryType.HOME && (
                   <div className="space-y-4 p-4 bg-gray-800/50 rounded-lg border border-gray-700">
                     <h3 className="text-lg font-semibold text-gray-200">Detalles de la Ubicación:</h3>
                     <div>
@@ -290,10 +331,26 @@ export default function Checkout() {
 
                 <button
                   type="submit"
-                  className="w-full bg-rose-800 hover:bg-rose-700 text-white px-6 py-3 rounded-lg font-bold text-lg transition-colors"
+                  disabled={isSubmitting}
+                  className="w-full bg-rose-800 hover:bg-rose-700 disabled:bg-rose-900 disabled:cursor-not-allowed text-white px-6 py-3 rounded-lg font-bold text-lg transition-colors flex items-center justify-center gap-2"
                 >
-                  Finalizar Compra
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="animate-spin" size={20} />
+                      Procesando...
+                    </>
+                  ) : (
+                    'Finalizar Compra'
+                  )}
                 </button>
+
+                {/* Mensaje de error general */}
+                {submitError && (
+                  <div className="flex items-center gap-2 p-4 bg-red-900/50 border border-red-700 rounded-lg text-red-400">
+                    <AlertCircle size={20} />
+                    <span>{submitError}</span>
+                  </div>
+                )}
               </form>
             </div>
           </div>

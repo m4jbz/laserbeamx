@@ -1,6 +1,78 @@
-import { Mail, Phone, MapPin, Clock } from "lucide-react";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { Mail, Phone, MapPin, Clock, MessageSquare, Loader2 } from "lucide-react";
+
+const ADMIN_WHATSAPP = import.meta.env.VITE_ADMIN_WHATSAPP;
+
+type FormData = {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  subject: string;
+  message: string;
+};
+
+const subjectLabels: Record<string, string> = {
+  general: "Consulta general",
+  order_status: "Estado del pedido",
+  product_question: "Pregunta sobre producto",
+  returns: "Devoluciones e intercambios",
+  other: "Otro",
+};
 
 export default function Contact() {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm<FormData>({
+    defaultValues: {
+      firstName: "",
+      lastName: "",
+      email: "",
+      phone: "",
+      subject: "",
+      message: "",
+    },
+  });
+
+  const generateWhatsAppMessage = (data: FormData): string => {
+    const subjectLabel = subjectLabels[data.subject] || data.subject;
+
+    let message = `*MENSAJE DE CONTACTO*\n\n`;
+    message += `*Nombre:* ${data.firstName} ${data.lastName}\n`;
+    message += `*Email:* ${data.email}\n`;
+    if (data.phone) {
+      message += `*Teléfono:* ${data.phone}\n`;
+    }
+    message += `\n`;
+    message += `*Asunto:* ${subjectLabel}\n`;
+    message += `\n`;
+    message += `*Mensaje:*\n${data.message}`;
+
+    return message;
+  };
+
+  const openWhatsApp = (message: string) => {
+    const encodedMessage = encodeURIComponent(message);
+    const whatsappUrl = `https://wa.me/${ADMIN_WHATSAPP}?text=${encodedMessage}`;
+    window.open(whatsappUrl, "_blank");
+  };
+
+  const onSubmit = async (data: FormData) => {
+    setIsSubmitting(true);
+    
+    const message = generateWhatsAppMessage(data);
+    openWhatsApp(message);
+    
+    reset();
+    setIsSubmitting(false);
+  };
+
   return (
     <div className="min-h-screen bg-[#0B0C14]">
       {/* Header */}
@@ -26,7 +98,7 @@ export default function Contact() {
                     Por lo general respondemos dentro de 24 horas.
                   </p>
                   <a
-                    href="alanslgado@gmail.com"
+                    href="mailto:alanslgado@gmail.com"
                     className="text-rose-400 hover:underline"
                   >
                     alanslgado@gmail.com
@@ -92,7 +164,7 @@ export default function Contact() {
           <div className="lg:col-span-2 bg-gray-900/70 border border-gray-800 rounded-xl shadow-md p-8">
             <h2 className="text-2xl font-bold text-white mb-6">Envianos un mensaje</h2>
             
-            <form className="space-y-6">
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-sm font-semibold text-gray-300 mb-2">
@@ -100,9 +172,15 @@ export default function Contact() {
                   </label>
                   <input
                     type="text"
-                    className="w-full px-4 py-3 rounded-lg border border-gray-700 focus:outline-none focus:ring-2 focus:ring-rose-800 bg-gray-800 text-white placeholder-gray-500"
+                    className={`w-full px-4 py-3 rounded-lg border focus:outline-none focus:ring-2 focus:ring-rose-800 bg-gray-800 text-white placeholder-gray-500 ${
+                      errors.firstName ? "border-red-500" : "border-gray-700"
+                    }`}
                     placeholder="Johan"
+                    {...register("firstName", { required: "El nombre es requerido" })}
                   />
+                  {errors.firstName && (
+                    <p className="text-red-500 text-sm mt-1">{errors.firstName.message}</p>
+                  )}
                 </div>
 
                 <div>
@@ -111,9 +189,15 @@ export default function Contact() {
                   </label>
                   <input
                     type="text"
-                    className="w-full px-4 py-3 rounded-lg border border-gray-700 focus:outline-none focus:ring-2 focus:ring-rose-800 bg-gray-800 text-white placeholder-gray-500"
+                    className={`w-full px-4 py-3 rounded-lg border focus:outline-none focus:ring-2 focus:ring-rose-800 bg-gray-800 text-white placeholder-gray-500 ${
+                      errors.lastName ? "border-red-500" : "border-gray-700"
+                    }`}
                     placeholder="Santana"
+                    {...register("lastName", { required: "El apellido es requerido" })}
                   />
+                  {errors.lastName && (
+                    <p className="text-red-500 text-sm mt-1">{errors.lastName.message}</p>
+                  )}
                 </div>
               </div>
 
@@ -123,67 +207,106 @@ export default function Contact() {
                 </label>
                 <input
                   type="email"
-                  className="w-full px-4 py-3 rounded-lg border border-gray-700 focus:outline-none focus:ring-2 focus:ring-rose-800 bg-gray-800 text-white placeholder-gray-500"
-                  placeholder="pedrooleasantana@gmail.com"
+                  className={`w-full px-4 py-3 rounded-lg border focus:outline-none focus:ring-2 focus:ring-rose-800 bg-gray-800 text-white placeholder-gray-500 ${
+                    errors.email ? "border-red-500" : "border-gray-700"
+                  }`}
+                  placeholder="correo@ejemplo.com"
+                  {...register("email", {
+                    required: "El correo es requerido",
+                    pattern: {
+                      value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                      message: "Correo inválido",
+                    },
+                  })}
                 />
+                {errors.email && (
+                  <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
+                )}
               </div>
 
               <div>
                 <label className="block text-sm font-semibold text-gray-300 mb-2">
-                  Numero de telefono:
+                  Numero de telefono
                 </label>
                 <input
                   type="tel"
                   className="w-full px-4 py-3 rounded-lg border border-gray-700 focus:outline-none focus:ring-2 focus:ring-rose-800 bg-gray-800 text-white placeholder-gray-500"
                   placeholder="(733) 173-7362"
+                  {...register("phone")}
                 />
               </div>
 
               <div>
                 <label className="block text-sm font-semibold text-gray-300 mb-2">
-                  Asunto:
+                  Asunto *
                 </label>
-                <select className="w-full px-4 py-3 rounded-lg border border-gray-700 focus:outline-none focus:ring-2 focus:ring-rose-800 bg-gray-800 text-white">
-                  <option>Selecciona un asunto</option>
-                  <option>Consulta general</option>
-                  <option>Estado del pedido</option>
-                  <option>Pregunta sobre producto</option>
-                  <option>Devoluciones e intercambios</option>
-                  <option>Otro</option>
+                <select
+                  className={`w-full px-4 py-3 rounded-lg border focus:outline-none focus:ring-2 focus:ring-rose-800 bg-gray-800 text-white ${
+                    errors.subject ? "border-red-500" : "border-gray-700"
+                  }`}
+                  {...register("subject", { required: "Selecciona un asunto" })}
+                >
+                  <option value="">Selecciona un asunto</option>
+                  <option value="general">Consulta general</option>
+                  <option value="order_status">Estado del pedido</option>
+                  <option value="product_question">Pregunta sobre producto</option>
+                  <option value="returns">Devoluciones e intercambios</option>
+                  <option value="other">Otro</option>
                 </select>
+                {errors.subject && (
+                  <p className="text-red-500 text-sm mt-1">{errors.subject.message}</p>
+                )}
               </div>
 
               <div>
                 <label className="block text-sm font-semibold text-gray-300 mb-2">
-                  Describenos el asunto:
+                  Describenos el asunto *
                 </label>
                 <textarea
                   rows={6}
-                  className="w-full px-4 py-3 rounded-lg border border-gray-700 focus:outline-none focus:ring-2 focus:ring-rose-800 resize-none bg-gray-800 text-white placeholder-gray-500"
+                  className={`w-full px-4 py-3 rounded-lg border focus:outline-none focus:ring-2 focus:ring-rose-800 resize-none bg-gray-800 text-white placeholder-gray-500 ${
+                    errors.message ? "border-red-500" : "border-gray-700"
+                  }`}
                   placeholder="Describe tu duda..."
+                  {...register("message", {
+                    required: "El mensaje es requerido",
+                    minLength: { value: 10, message: "Mínimo 10 caracteres" },
+                  })}
                 />
+                {errors.message && (
+                  <p className="text-red-500 text-sm mt-1">{errors.message.message}</p>
+                )}
               </div>
 
               <button
                 type="submit"
-                className="w-full bg-rose-800 hover:bg-rose-700 text-white py-4 rounded-lg font-semibold transition-colors shadow-lg shadow-rose-900/40"
+                disabled={isSubmitting}
+                className="w-full bg-rose-800 hover:bg-rose-700 disabled:bg-rose-900 disabled:cursor-not-allowed text-white py-4 rounded-lg font-semibold transition-colors shadow-lg shadow-rose-900/40 flex items-center justify-center gap-2"
               >
-                Enviar Mensaje
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="h-5 w-5 animate-spin" />
+                    Enviando...
+                  </>
+                ) : (
+                  <>
+                    <MessageSquare className="h-5 w-5" />
+                    Enviar por WhatsApp
+                  </>
+                )}
               </button>
             </form>
 
             <p className="text-sm text-gray-400 text-center mt-4">
-              Normalmente respondemos dentro de 24 horas.
+              Se abrirá WhatsApp con tu mensaje. Normalmente respondemos dentro de 24 horas.
             </p>
           </div>
         </div>
 
         {/* FAQ Section */}
-        <div id="faq"  className="mt-16">
+        <div id="faq" className="mt-16">
           <h2 className="text-3xl font-bold text-white text-center mb-8">
-    
             Preguntas Frecuentes
-            
           </h2>
           
           <div className="max-w-3xl mx-auto space-y-4">
