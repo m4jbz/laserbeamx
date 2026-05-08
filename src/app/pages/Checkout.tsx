@@ -1,19 +1,18 @@
 import React, { useState } from 'react';
 import { useCart } from '../context/CartContext';
 import { Trash2, Plus, Minus } from 'lucide-react';
-// CAMBIO AQUÍ: Usamos "react-router" en lugar de "react-router-dom"
 import { useNavigate } from 'react-router'; 
 import { useOrders } from '../context/OrderContext';
 
 
 export default function Checkout() {
   const { cartItems, removeItem, updateQuantity, getTotalPrice, clearCart } = useCart();
-  const { addOrder } = useOrders(); // Usar addOrder del contexto de pedidos
+  const { addOrder } = useOrders();
   const navigate = useNavigate();
 
   const [customerName, setCustomerName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
-  const [paymentMethod, setPaymentMethod] = useState<'efectivo' | 'en_linea'>('efectivo');
+  const [paymentMethod] = useState<'transferencia'>('transferencia');
   const [deliveryType, setDeliveryType] = useState<'local' | 'domicilio'>('local');
   const [address, setAddress] = useState({
     street: '',
@@ -26,7 +25,7 @@ export default function Checkout() {
   const [formErrors, setFormErrors] = useState<any>({});
 
   const handlePhoneNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value.replace(/\D/g, ''); // Solo números
+    const value = e.target.value.replace(/\D/g, '');
     setPhoneNumber(value);
   };
 
@@ -63,10 +62,10 @@ export default function Checkout() {
       date: new Date().toISOString(),
     };
 
-    addOrder(orderDetails); // Añadir el pedido al contexto de pedidos
+    addOrder(orderDetails);
     alert('Pedido realizado con éxito!');
     clearCart();
-    navigate('/shop'); // Redirigir a la tienda o a una página de confirmación
+    navigate('/shop');
   };
 
   const totalPrice = getTotalPrice();
@@ -76,19 +75,17 @@ export default function Checkout() {
       <div className="max-w-4xl mx-auto">
         <h1 className="text-3xl font-bold text-rose-500 mb-8">Finalizar Compra</h1>
 
-  {cartItems.length === 0 ? (
-  <div className="text-center py-20 bg-gray-900/50 rounded-2xl border border-gray-800">
-    <p className="text-xl text-gray-400 mb-6">Tu carrito está vacío.</p>
-    <button 
-      onClick={() => navigate('/shop')} // Esto debe coincidir con el path en routes.tsx
-      className="bg-rose-800 hover:bg-rose-700 text-white px-8 py-3 rounded-xl font-bold transition-all active:scale-95"
-    >
-      Ir a la Tienda
-    </button>
-  </div>
-) 
-
-         : (
+        {cartItems.length === 0 ? (
+          <div className="text-center py-20 bg-gray-900/50 rounded-2xl border border-gray-800">
+            <p className="text-xl text-gray-400 mb-6">Tu carrito está vacío.</p>
+            <button 
+              onClick={() => navigate('/shop')}
+              className="bg-rose-800 hover:bg-rose-700 text-white px-8 py-3 rounded-xl font-bold transition-all active:scale-95"
+            >
+              Ir a la Tienda
+            </button>
+          </div>
+        ) : (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Columna de Carrito */}
             <div className="lg:col-span-2 bg-gray-900/50 p-6 rounded-lg border border-gray-800">
@@ -161,31 +158,17 @@ export default function Checkout() {
                   {formErrors.phoneNumber && <p className="text-red-400 text-xs mt-1">{formErrors.phoneNumber}</p>}
                 </div>
 
+                {/* Método de Pago: Transferencia */}
                 <div>
                   <label className="block text-gray-300 text-sm font-bold mb-2">Método de Pago:</label>
-                  <div className="flex gap-4">
-                    <label className="inline-flex items-center">
-                      <input
-                        type="radio"
-                        name="paymentMethod"
-                        value="efectivo"
-                        checked={paymentMethod === 'efectivo'}
-                        onChange={() => setPaymentMethod('efectivo')}
-                        className="form-radio text-rose-600"
-                      />
-                      <span className="ml-2 text-gray-300">Efectivo</span>
-                    </label>
-                    <label className="inline-flex items-center">
-                      <input
-                        type="radio"
-                        name="paymentMethod"
-                        value="en_linea"
-                        checked={paymentMethod === 'en_linea'}
-                        onChange={() => setPaymentMethod('en_linea')}
-                        className="form-radio text-rose-600"
-                      />
-                      <span className="ml-2 text-gray-300">Pago en Línea</span>
-                    </label>
+                  <div className="p-4 bg-gray-800/70 rounded-lg border border-rose-800/60">
+                    <p className="text-gray-200 font-semibold mb-1">💳 Transferencia Bancaria</p>
+                    <p className="text-gray-400 text-xs mb-2">Realiza tu pago a la siguiente cuenta y envía el comprobante:</p>
+                    <div className="bg-gray-900 rounded p-3 flex items-center justify-between gap-2">
+                      <span className="text-amber-400 font-mono text-sm tracking-widest select-all">
+                        722969010216825404
+                      </span>
+                    </div>
                   </div>
                 </div>
 

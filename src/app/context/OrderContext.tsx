@@ -5,7 +5,7 @@ export interface Order {
   id: string;
   customerName: string;
   phoneNumber: string;
-  paymentMethod: 'efectivo' | 'en_linea';
+  paymentMethod: 'transferencia';
   deliveryType: 'local' | 'domicilio';
   address: {
     street: string;
@@ -18,7 +18,7 @@ export interface Order {
   cartItems: { id: number; name: string; quantity: number; price: number }[];
   total: number;
   date: string;
-  estado: 'Pendiente' | 'Enviado' | 'Cancelado'; // Nuevo campo para el estado del pedido
+  estado: 'Pendiente' | 'Enviado' | 'Cancelado';
 }
 
 interface OrderContextType {
@@ -48,7 +48,7 @@ export const OrderProvider = ({ children }: { children: ReactNode }) => {
     const orderWithIdAndStatus: Order = {
       ...newOrder,
       id: `ORD-${Date.now()}`,
-      estado: 'Pendiente', // Estado inicial por defecto
+      estado: 'Pendiente',
     };
     setOrders((prevOrders) => [...prevOrders, orderWithIdAndStatus]);
   };
