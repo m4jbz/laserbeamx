@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { Outlet, useLocation } from "react-router";
 import Header from "./Header";
 import Footer from "./Footer";
+import { AdminShortcutHandler } from "./AdminShortcutHandler";
 
 export default function Layout() {
   const { pathname, hash } = useLocation(); 
@@ -24,6 +25,7 @@ export default function Layout() {
         <Outlet />
       </main>
       <Footer />
+      <AdminShortcutHandler />
     </div>
   );
 }

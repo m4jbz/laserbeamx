@@ -14,7 +14,7 @@ export default function ProductCard({ product }: ProductCardProps) {
     <div className="group bg-gray-900/50 border border-gray-800 rounded-xl shadow-md overflow-hidden transition-all duration-300 hover:shadow-xl hover:shadow-rose-900/20 hover:-translate-y-1">
       <div className="aspect-square overflow-hidden bg-gray-800">
         <ImageWithFallback
-          src={product.image_path}
+          src={product.imagePath}
           alt={product.name}
           className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
         />

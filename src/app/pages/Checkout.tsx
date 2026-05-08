@@ -1,19 +1,39 @@
 import React, { useState } from 'react';
 import { useCart } from '../context/CartContext';
+<<<<<<< HEAD
 import { Trash2, Plus, Minus } from 'lucide-react';
+=======
+import { Trash2, Plus, Minus, Loader2, AlertCircle } from 'lucide-react';
+>>>>>>> 6e1cb12573ceb8f6418cf2b0caf6b20a809d1648
 import { useNavigate } from 'react-router'; 
-import { useOrders } from '../context/OrderContext';
+import { 
+  createOrder, 
+  PaymentMethod, 
+  DeliveryType,
+  OrderStatus,
+  PaymentStatus,
+} from '../../api/orders';
 
 
 export default function Checkout() {
   const { cartItems, removeItem, updateQuantity, getTotalPrice, clearCart } = useCart();
+<<<<<<< HEAD
   const { addOrder } = useOrders();
+=======
+>>>>>>> 6e1cb12573ceb8f6418cf2b0caf6b20a809d1648
   const navigate = useNavigate();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   const [customerName, setCustomerName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
+<<<<<<< HEAD
   const [paymentMethod] = useState<'transferencia'>('transferencia');
   const [deliveryType, setDeliveryType] = useState<'local' | 'domicilio'>('local');
+=======
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>(PaymentMethod.CASH);
+  const [deliveryType, setDeliveryType] = useState<DeliveryType>(DeliveryType.PLACE);
+>>>>>>> 6e1cb12573ceb8f6418cf2b0caf6b20a809d1648
   const [address, setAddress] = useState({
     street: '',
     number: '',
@@ -33,7 +53,7 @@ export default function Checkout() {
     const errors: any = {};
     if (!customerName.trim()) errors.customerName = 'El nombre del cliente es requerido.';
     if (phoneNumber.length !== 10) errors.phoneNumber = 'El número de teléfono debe tener 10 dígitos.';
-    if (deliveryType === 'domicilio') {
+    if (deliveryType === DeliveryType.HOME) {
       if (!address.street.trim()) errors.street = 'La calle es requerida.';
       if (!address.number.trim()) errors.number = 'El número es requerido.';
       if (!address.colony.trim()) errors.colony = 'La colonia es requerida.';
@@ -43,29 +63,64 @@ export default function Checkout() {
     return Object.keys(errors).length === 0;
   };
 
-  const handleSubmitOrder = (e: React.FormEvent) => {
+  const handleSubmitOrder = async (e: React.FormEvent) => {
     e.preventDefault();
+    setSubmitError(null);
+    
     if (!validateForm()) {
-      alert('Por favor, corrige los errores en el formulario.');
       return;
     }
 
-    const orderDetails = {
-      customerName,
-      phoneNumber,
-      paymentMethod,
-      deliveryType,
-      address: deliveryType === 'domicilio' ? address : null,
-      notes,
-      cartItems: cartItems.map(item => ({ id: item.id, name: item.name, quantity: item.quantity, price: item.price })),
-      total: getTotalPrice(),
-      date: new Date().toISOString(),
-    };
+    setIsSubmitting(true);
 
-    addOrder(orderDetails);
-    alert('Pedido realizado con éxito!');
-    clearCart();
-    navigate('/shop');
+    try {
+      // Construir dirección en las notas si es a domicilio
+      let orderNotes = notes || '';
+      if (deliveryType === DeliveryType.HOME) {
+        const addressStr = `Direccion: ${address.street} #${address.number}, Col. ${address.colony}, ${address.city}${address.references ? ` (Ref: ${address.references})` : ''}`;
+        orderNotes = orderNotes ? `${addressStr}\n\n${orderNotes}` : addressStr;
+      }
+
+      const order = await createOrder({
+        clientName: customerName,
+        phoneNumber: `+52${phoneNumber}`,  // Formato internacional
+        paymentMethod,
+        deliveryType,
+        orderStatus: OrderStatus.PENDING,
+        paymentStatus: PaymentStatus.PENDING,
+        notes: orderNotes || undefined,
+        details: cartItems.map(item => ({ 
+          id: item.id, 
+          quantity: item.quantity 
+        })),
+      });
+
+      // Guardar datos del carrito antes de limpiar para mostrar en confirmación
+      const orderData = {
+        ...order,
+        total: getTotalPrice(), // Usar el total calculado localmente
+        cartItems: cartItems.map(item => ({
+          name: item.name,
+          quantity: item.quantity,
+          price: item.price,
+          subtotal: item.price * item.quantity,
+        })),
+        deliveryType,
+        paymentMethod,
+        clientName: customerName,
+        phoneNumber: `+52${phoneNumber}`,
+      };
+
+      clearCart();
+      
+      // Navegar a la página de confirmación con los datos del pedido
+      navigate('/order-confirmation', { state: { order: orderData } });
+    } catch (error) {
+      console.error('Error al crear pedido:', error);
+      setSubmitError(error instanceof Error ? error.message : 'Error al procesar tu pedido. Por favor intenta de nuevo.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const totalPrice = getTotalPrice();
@@ -94,7 +149,7 @@ export default function Checkout() {
                 {cartItems.map((item) => (
                   <div key={item.id} className="flex items-center justify-between bg-gray-800/50 p-4 rounded-lg border border-gray-700">
                     <div className="flex items-center gap-4">
-                      <img src={item.image_path} alt={item.name} className="w-16 h-16 object-cover rounded-lg" />
+                      <img src={item.imagePath} alt={item.name} className="w-16 h-16 object-cover rounded-lg" />
                       <div>
                         <p className="font-bold text-gray-100">{item.name}</p>
                         <p className="text-rose-400">${item.price.toFixed(2)}</p>
@@ -161,14 +216,29 @@ export default function Checkout() {
                 {/* Método de Pago: Transferencia */}
                 <div>
                   <label className="block text-gray-300 text-sm font-bold mb-2">Método de Pago:</label>
-                  <div className="p-4 bg-gray-800/70 rounded-lg border border-rose-800/60">
-                    <p className="text-gray-200 font-semibold mb-1">💳 Transferencia Bancaria</p>
-                    <p className="text-gray-400 text-xs mb-2">Realiza tu pago a la siguiente cuenta y envía el comprobante:</p>
-                    <div className="bg-gray-900 rounded p-3 flex items-center justify-between gap-2">
-                      <span className="text-amber-400 font-mono text-sm tracking-widest select-all">
-                        722969010216825404
-                      </span>
-                    </div>
+                  <div className="flex gap-4">
+                    <label className="inline-flex items-center">
+                      <input
+                        type="radio"
+                        name="paymentMethod"
+                        value={PaymentMethod.CASH}
+                        checked={paymentMethod === PaymentMethod.CASH}
+                        onChange={() => setPaymentMethod(PaymentMethod.CASH)}
+                        className="form-radio text-rose-600"
+                      />
+                      <span className="ml-2 text-gray-300">Efectivo</span>
+                    </label>
+                    <label className="inline-flex items-center">
+                      <input
+                        type="radio"
+                        name="paymentMethod"
+                        value={PaymentMethod.TRANSFER}
+                        checked={paymentMethod === PaymentMethod.TRANSFER}
+                        onChange={() => setPaymentMethod(PaymentMethod.TRANSFER)}
+                        className="form-radio text-rose-600"
+                      />
+                      <span className="ml-2 text-gray-300">Transferencia</span>
+                    </label>
                   </div>
                 </div>
 
@@ -179,9 +249,9 @@ export default function Checkout() {
                       <input
                         type="radio"
                         name="deliveryType"
-                        value="local"
-                        checked={deliveryType === 'local'}
-                        onChange={() => setDeliveryType('local')}
+                        value={DeliveryType.PLACE}
+                        checked={deliveryType === DeliveryType.PLACE}
+                        onChange={() => setDeliveryType(DeliveryType.PLACE)}
                         className="form-radio text-rose-600"
                       />
                       <span className="ml-2 text-gray-300">Recoger en Local</span>
@@ -190,9 +260,9 @@ export default function Checkout() {
                       <input
                         type="radio"
                         name="deliveryType"
-                        value="domicilio"
-                        checked={deliveryType === 'domicilio'}
-                        onChange={() => setDeliveryType('domicilio')}
+                        value={DeliveryType.HOME}
+                        checked={deliveryType === DeliveryType.HOME}
+                        onChange={() => setDeliveryType(DeliveryType.HOME)}
                         className="form-radio text-rose-600"
                       />
                       <span className="ml-2 text-gray-300">Servicio a Domicilio (Costo Extra)</span>
@@ -200,7 +270,7 @@ export default function Checkout() {
                   </div>
                 </div>
 
-                {deliveryType === 'domicilio' && (
+                {deliveryType === DeliveryType.HOME && (
                   <div className="space-y-4 p-4 bg-gray-800/50 rounded-lg border border-gray-700">
                     <h3 className="text-lg font-semibold text-gray-200">Detalles de la Ubicación:</h3>
                     <div>
@@ -273,10 +343,26 @@ export default function Checkout() {
 
                 <button
                   type="submit"
-                  className="w-full bg-rose-800 hover:bg-rose-700 text-white px-6 py-3 rounded-lg font-bold text-lg transition-colors"
+                  disabled={isSubmitting}
+                  className="w-full bg-rose-800 hover:bg-rose-700 disabled:bg-rose-900 disabled:cursor-not-allowed text-white px-6 py-3 rounded-lg font-bold text-lg transition-colors flex items-center justify-center gap-2"
                 >
-                  Finalizar Compra
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="animate-spin" size={20} />
+                      Procesando...
+                    </>
+                  ) : (
+                    'Finalizar Compra'
+                  )}
                 </button>
+
+                {/* Mensaje de error general */}
+                {submitError && (
+                  <div className="flex items-center gap-2 p-4 bg-red-900/50 border border-red-700 rounded-lg text-red-400">
+                    <AlertCircle size={20} />
+                    <span>{submitError}</span>
+                  </div>
+                )}
               </form>
             </div>
           </div>

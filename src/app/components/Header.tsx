@@ -29,7 +29,7 @@ export default function Header() {
           <Link to="/" className="flex items-center space-x-2 group">
             <div className="w-12 h-12 flex items-center justify-center overflow-hidden">
               <img 
-                src="/assets/kali.svg" 
+                src="https://codeberg.org/m4jbz/laserbeamx-images/raw/branch/main/kali.svg" 
                 alt="Logo Laserbeamx" 
                 className="w-full h-full object-contain"
               />

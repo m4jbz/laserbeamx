@@ -12,7 +12,7 @@ export default function Footer() {
             <div className="flex items-center space-x-3">
               
               <img 
-                src="/assets/kali.svg" 
+                src="https://codeberg.org/m4jbz/laserbeamx-images/raw/branch/main/kali.svg" 
                 alt="Logo Laserbeamx" 
                 className="w-10 h-10 object-contain"
               />

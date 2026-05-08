@@ -6,7 +6,6 @@ import "./styles/index.css";
 
 import { AuthProvider } from "./app/context/AuthContext";
 import { CartProvider } from "./app/context/CartContext";
-import { OrderProvider } from "./app/context/OrderContext";
 
 const queryClient = new QueryClient();
 
@@ -15,9 +14,7 @@ createRoot(document.getElementById("root")!).render(
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <CartProvider>
-          <OrderProvider>
-            <App />
-          </OrderProvider>
+          <App />
         </CartProvider>
       </AuthProvider>
     </QueryClientProvider>

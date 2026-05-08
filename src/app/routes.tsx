@@ -4,7 +4,8 @@ import Shop from "./pages/Shop";
 import CustomOrders from "./pages/CustomOrders";
 import Contact from "./pages/Contact";
 import Layout from "./components/Layout";
-import Checkout from "./pages/Checkout"; // Importar Checkout
+import Checkout from "./pages/Checkout";
+import OrderConfirmation from "./pages/OrderConfirmation";
 import AdminPanel from "./pages/AdminPanel";
 import { useAuth } from "./context/AuthContext";
 
@@ -25,8 +26,12 @@ export const router = createBrowserRouter([
     ],
   },
   {
-    path: "/checkout", // Nueva ruta para el checkout
+    path: "/checkout",
     Component: Checkout,
+  },
+  {
+    path: "/order-confirmation",
+    Component: OrderConfirmation,
   },
   {
     path: "/admin",

@@ -28,7 +28,7 @@ export default function Home() {
 
           <div className="relative aspect-[4/3] w-full max-w-[500px] mx-auto md:max-w-none md:mx-0">
             <img 
-              src="/assets/kali.svg" 
+              src="https://codeberg.org/m4jbz/laserbeamx-images/raw/branch/main/kali.svg" 
               alt="Dragón Laserbeamx" 
               className="w-full h-full object-contain"
             />
@@ -79,7 +79,7 @@ export default function Home() {
         {/* Capa de imagen y oscurecido */}
         <div className="absolute inset-0 z-0">
           <img 
-            src="/assets/bg-home.jpg" 
+            src="https://codeberg.org/m4jbz/laserbeamx-images/raw/branch/main/bg-home.jpg" 
             alt="Fondo" 
             className="w-full h-full object-cover"
           />
