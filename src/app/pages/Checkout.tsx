@@ -19,7 +19,7 @@ export default function Checkout() {
 
   const [customerName, setCustomerName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
-  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>(PaymentMethod.CASH);
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>(PaymentMethod.TRANSFER);
   const [deliveryType, setDeliveryType] = useState<DeliveryType>(DeliveryType.PLACE);
   const [address, setAddress] = useState({
     street: '',
@@ -203,30 +203,14 @@ export default function Checkout() {
                 {/* Método de Pago: Transferencia */}
                 <div>
                   <label className="block text-gray-300 text-sm font-bold mb-2">Método de Pago:</label>
-                  <div className="flex gap-4">
-                    <label className="inline-flex items-center">
-                      <input
-                        type="radio"
-                        name="paymentMethod"
-                        value={PaymentMethod.CASH}
-                        checked={paymentMethod === PaymentMethod.CASH}
-                        onChange={() => setPaymentMethod(PaymentMethod.CASH)}
-                        className="form-radio text-rose-600"
-                      />
-                      <span className="ml-2 text-gray-300">Efectivo</span>
-                    </label>
-                    <label className="inline-flex items-center">
-                      <input
-                        type="radio"
-                        name="paymentMethod"
-                        value={PaymentMethod.TRANSFER}
-                        checked={paymentMethod === PaymentMethod.TRANSFER}
-                        onChange={() => setPaymentMethod(PaymentMethod.TRANSFER)}
-                        className="form-radio text-rose-600"
-                      />
-                      <span className="ml-2 text-gray-300">Transferencia</span>
-                    </label>
-                  </div>
+                  <div className="p-4 bg-gray-800/70 rounded-lg border border-rose-800/60">
+                    <p className="text-gray-200 font-semibold mb-1">💳 Transferencia Bancaria</p>
+                    <p className="text-gray-400 text-xs mb-2">Realiza tu pago a la siguiente cuenta y envía el comprobante:</p>
+                    <div className="bg-gray-900 rounded p-3 flex items-center justify-between gap-2">
+                      <span className="text-amber-400 font-mono text-sm tracking-widest select-all">
+                        722969010216825404
+                      </span>
+                    </div>                  </div>
                 </div>
 
                 <div>
