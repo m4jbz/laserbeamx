@@ -6,7 +6,7 @@ export default function AdminLoginModal({ onClose }: { onClose: () => void }) {
   const [pass, setPass] = useState('');
   const { login } = useAuth();
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = (e: React.SubmitEvent) => {
     e.preventDefault();
     if (user === 'admin' && pass === 'pollos123') { 
       login('token-de-acceso');
