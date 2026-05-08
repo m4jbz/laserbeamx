@@ -1,10 +1,6 @@
 import React, { useState } from 'react';
 import { useCart } from '../context/CartContext';
-<<<<<<< HEAD
-import { Trash2, Plus, Minus } from 'lucide-react';
-=======
 import { Trash2, Plus, Minus, Loader2, AlertCircle } from 'lucide-react';
->>>>>>> 6e1cb12573ceb8f6418cf2b0caf6b20a809d1648
 import { useNavigate } from 'react-router'; 
 import { 
   createOrder, 
@@ -17,23 +13,14 @@ import {
 
 export default function Checkout() {
   const { cartItems, removeItem, updateQuantity, getTotalPrice, clearCart } = useCart();
-<<<<<<< HEAD
-  const { addOrder } = useOrders();
-=======
->>>>>>> 6e1cb12573ceb8f6418cf2b0caf6b20a809d1648
   const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
 
   const [customerName, setCustomerName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
-<<<<<<< HEAD
-  const [paymentMethod] = useState<'transferencia'>('transferencia');
-  const [deliveryType, setDeliveryType] = useState<'local' | 'domicilio'>('local');
-=======
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>(PaymentMethod.CASH);
   const [deliveryType, setDeliveryType] = useState<DeliveryType>(DeliveryType.PLACE);
->>>>>>> 6e1cb12573ceb8f6418cf2b0caf6b20a809d1648
   const [address, setAddress] = useState({
     street: '',
     number: '',
@@ -62,7 +49,7 @@ export default function Checkout() {
     setFormErrors(errors);
     return Object.keys(errors).length === 0;
   };
-
+  
   const handleSubmitOrder = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitError(null);
