@@ -25,7 +25,7 @@ import { Button } from '../components/ui/button'
 export default function AdminPanel() {
   const queryClient = useQueryClient()
   const navigate = useNavigate()
-  const { logout } = useAuth()
+  const { logout, token } = useAuth()
   const [activeTab, setActiveTab] = useState<'productos' | 'pedidos'>('productos')
 
   // Estados para modales de productos
@@ -42,12 +42,23 @@ export default function AdminPanel() {
   // Query de pedidos
   const { data: orders, isLoading: loadingOrders, refetch: refetchOrders } = useQuery({
     queryKey: ['orders'],
-    queryFn: getOrders,
+    queryFn: () => {
+      if (!token) {
+        throw new Error('No authenticated')
+      }
+      return getOrders(token)
+    },
+    enabled: !!token,
   })
 
   // Mutations
   const deleteProductMutation = useMutation({
-    mutationFn: deleteProduct,
+    mutationFn: (id: string) => {
+      if (!token) {
+        throw new Error('No authenticated')
+      }
+      return deleteProduct(id, token)
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['products'] })
       setDeleteDialogOpen(false)
@@ -56,8 +67,12 @@ export default function AdminPanel() {
   })
 
   const updateOrderMutation = useMutation({
-    mutationFn: ({ id, data }: { id: string; data: Parameters<typeof updateOrder>[1] }) =>
-      updateOrder(id, data),
+    mutationFn: ({ id, data }: { id: string; data: Parameters<typeof updateOrder>[1] }) => {
+      if (!token) {
+        throw new Error('No authenticated')
+      }
+      return updateOrder(id, data, token)
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['orders'] })
     },

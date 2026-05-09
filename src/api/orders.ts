@@ -95,8 +95,12 @@ const parseOrder = (order: any): Order => ({
 })
 
 // API Functions
-export const getOrders = async (): Promise<Order[]> => {
-  const res = await fetch(`${API_URL}/orders`)
+export const getOrders = async (token: string): Promise<Order[]> => {
+  const res = await fetch(`${API_URL}/orders`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
   if (!res.ok) throw new Error('Error al obtener pedidos')
   const json = await res.json()
   return json.data.map(parseOrder)
@@ -123,10 +127,17 @@ export const createOrder = async (data: CreateOrderDto): Promise<Order> => {
   return parseOrder(json.data.order)
 }
 
-export const updateOrder = async (id: string, data: UpdateOrderDto): Promise<Order> => {
+export const updateOrder = async (
+  id: string,
+  data: UpdateOrderDto,
+  token: string,
+): Promise<Order> => {
   const res = await fetch(`${API_URL}/orders/${id}`, {
     method: 'PATCH',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
     body: JSON.stringify(data),
   })
   if (!res.ok) {
@@ -137,9 +148,12 @@ export const updateOrder = async (id: string, data: UpdateOrderDto): Promise<Ord
   return parseOrder(json.data.updatedOrder)
 }
 
-export const deleteOrder = async (id: string): Promise<void> => {
+export const deleteOrder = async (id: string, token: string): Promise<void> => {
   const res = await fetch(`${API_URL}/orders/${id}`, {
     method: 'DELETE',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
   })
   if (!res.ok) {
     const error = await res.json().catch(() => ({}))

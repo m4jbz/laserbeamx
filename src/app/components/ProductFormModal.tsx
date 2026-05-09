@@ -17,13 +17,14 @@ import { Input } from './ui/input'
 import { Textarea } from './ui/textarea'
 import { Label } from './ui/label'
 
-import { 
-  createProduct, 
-  updateProduct, 
-  type Product, 
-  type CreateProductDto 
+import {
+  createProduct,
+  updateProduct,
+  type Product,
+  type CreateProductDto,
 } from '../../api/products'
 import { uploadImageToCodeberg } from '../../api/codeberg'
+import { useAuth } from '../context/AuthContext'
 
 type FormData = {
   name: string
@@ -40,6 +41,7 @@ type Props = {
 export function ProductFormModal({ open, onOpenChange, product }: Props) {
   const queryClient = useQueryClient()
   const isEditing = !!product
+  const { token } = useAuth()
 
   // Estado para la imagen
   const [imageFile, setImageFile] = useState<File | null>(null)
@@ -115,7 +117,12 @@ export function ProductFormModal({ open, onOpenChange, product }: Props) {
 
   // Mutation para crear
   const createMutation = useMutation({
-    mutationFn: createProduct,
+    mutationFn: (data: CreateProductDto) => {
+      if (!token) {
+        throw new Error('No authenticated')
+      }
+      return createProduct(data, token)
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['products'] })
       onOpenChange(false)
@@ -124,8 +131,12 @@ export function ProductFormModal({ open, onOpenChange, product }: Props) {
 
   // Mutation para actualizar
   const updateMutation = useMutation({
-    mutationFn: ({ id, data }: { id: string; data: Partial<CreateProductDto> }) =>
-      updateProduct(id, data),
+    mutationFn: ({ id, data }: { id: string; data: Partial<CreateProductDto> }) => {
+      if (!token) {
+        throw new Error('No authenticated')
+      }
+      return updateProduct(id, data, token)
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['products'] })
       onOpenChange(false)
