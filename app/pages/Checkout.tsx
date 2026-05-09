@@ -392,7 +392,7 @@ export default function Checkout() {
                    onClick={() => navigate('/shop')}
                   className="w-full bg-blue-900 hover:bg-blue-700 disabled:bg-rose-900 disabled:cursor-not-allowed text-white px-6 py-3 rounded-lg font-bold text-lg transition-colors flex items-center justify-center gap-2"
                  >
-                    Seguir comprando
+                    Seguir Comprando
                   </button>
 
 
