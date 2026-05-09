@@ -1,0 +1,357 @@
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { Mail, Phone, MapPin, Clock, MessageSquare, Loader2 } from "lucide-react";
+
+const ADMIN_WHATSAPP = import.meta.env.VITE_ADMIN_WHATSAPP;
+
+type FormData = {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  subject: string;
+  message: string;
+};
+
+const subjectLabels: Record<string, string> = {
+  general: "Consulta general",
+  order_status: "Estado del pedido",
+  product_question: "Pregunta sobre producto",
+  returns: "Devoluciones e intercambios",
+  other: "Otro",
+};
+
+export default function Contact() {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm<FormData>({
+    defaultValues: {
+      firstName: "",
+      lastName: "",
+      email: "",
+      phone: "",
+      subject: "",
+      message: "",
+    },
+  });
+
+  const generateWhatsAppMessage = (data: FormData): string => {
+    const subjectLabel = subjectLabels[data.subject] || data.subject;
+
+    let message = `*MENSAJE DE CONTACTO*\n\n`;
+    message += `*Nombre:* ${data.firstName} ${data.lastName}\n`;
+    message += `*Email:* ${data.email}\n`;
+    if (data.phone) {
+      message += `*Teléfono:* ${data.phone}\n`;
+    }
+    message += `\n`;
+    message += `*Asunto:* ${subjectLabel}\n`;
+    message += `\n`;
+    message += `*Mensaje:*\n${data.message}`;
+
+    return message;
+  };
+
+  const openWhatsApp = (message: string) => {
+    const encodedMessage = encodeURIComponent(message);
+    const whatsappUrl = `https://wa.me/${ADMIN_WHATSAPP}?text=${encodedMessage}`;
+    window.open(whatsappUrl, "_blank");
+  };
+
+  const onSubmit = async (data: FormData) => {
+    setIsSubmitting(true);
+    
+    const message = generateWhatsAppMessage(data);
+    openWhatsApp(message);
+    
+    reset();
+    setIsSubmitting(false);
+  };
+
+  return (
+    <div className="min-h-screen bg-[#0B0C14]">
+      {/* Header */}
+      <div className="bg-gradient-to-r from-rose-900 to-rose-800 text-white py-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h1 className="text-4xl font-bold mb-2">Contactanos</h1>
+          <p className="text-rose-200">Estamos aquí para ayudarte con cualquier pregunta o preocupación</p>
+        </div>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Contact Information */}
+          <div className="space-y-6">
+            <div className="bg-gray-900/50 border border-gray-800 rounded-xl shadow-md p-6">
+              <div className="flex items-start space-x-4">
+                <div className="w-12 h-12 bg-rose-900/30 rounded-full flex items-center justify-center flex-shrink-0">
+                  <Mail className="w-6 h-6 text-rose-400" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-white mb-1">Email</h3>
+                  <p className="text-gray-400 text-sm mb-2">
+                    Por lo general respondemos dentro de 24 horas.
+                  </p>
+                  <a
+                    href="mailto:alanslgado@gmail.com"
+                    className="text-rose-400 hover:underline"
+                  >
+                    alanslgado@gmail.com
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-gray-900/50 border border-gray-800 rounded-xl shadow-md p-6">
+              <div className="flex items-start space-x-4">
+                <div className="w-12 h-12 bg-rose-900/30 rounded-full flex items-center justify-center flex-shrink-0">
+                  <Phone className="w-6 h-6 text-rose-400" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-white mb-1">Telefono</h3>
+                  <p className="text-gray-400 text-sm mb-2">
+                    Atención al cliente.
+                  </p>
+                  <a
+                    href="tel:+7701277970"
+                    className="text-rose-400 hover:underline"
+                  >
+                    (770) 127-7970
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-gray-900/50 border border-gray-800 rounded-xl shadow-md p-6">
+              <div className="flex items-start space-x-4">
+                <div className="w-12 h-12 bg-rose-900/30 rounded-full flex items-center justify-center flex-shrink-0">
+                  <MapPin className="w-6 h-6 text-rose-400" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-white mb-1">Dirección</h3>
+                  <p className="text-gray-400 text-sm">
+                    Calle: Bandera Nacional<br />
+                    Iguala de la independecia, CP: 40000<br />
+                    Guerrero, México
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-gray-900/50 border border-gray-800 rounded-xl shadow-md p-6">
+              <div className="flex items-start space-x-4">
+                <div className="w-12 h-12 bg-rose-900/30 rounded-full flex items-center justify-center flex-shrink-0">
+                  <Clock className="w-6 h-6 text-rose-400" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-white mb-1">Horario</h3>
+                  <div className="text-gray-400 text-sm space-y-1">
+                    <p>Lunes - Viernes: 9:00 AM - 5:00 PM</p>
+                    <p>Sabado: 10:00 AM - 2:00 PM</p>
+                    <p>Domingo: Cerrado</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Contact Form */}
+          <div className="lg:col-span-2 bg-gray-900/70 border border-gray-800 rounded-xl shadow-md p-8">
+            <h2 className="text-2xl font-bold text-white mb-6">Envianos un mensaje</h2>
+            
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-semibold text-gray-300 mb-2">
+                    Nombre *
+                  </label>
+                  <input
+                    type="text"
+                    className={`w-full px-4 py-3 rounded-lg border focus:outline-none focus:ring-2 focus:ring-rose-800 bg-gray-800 text-white placeholder-gray-500 ${
+                      errors.firstName ? "border-red-500" : "border-gray-700"
+                    }`}
+                    placeholder="Johan"
+                    {...register("firstName", { required: "El nombre es requerido" })}
+                  />
+                  {errors.firstName && (
+                    <p className="text-red-500 text-sm mt-1">{errors.firstName.message}</p>
+                  )}
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold text-gray-300 mb-2">
+                    Apellido *
+                  </label>
+                  <input
+                    type="text"
+                    className={`w-full px-4 py-3 rounded-lg border focus:outline-none focus:ring-2 focus:ring-rose-800 bg-gray-800 text-white placeholder-gray-500 ${
+                      errors.lastName ? "border-red-500" : "border-gray-700"
+                    }`}
+                    placeholder="Santana"
+                    {...register("lastName", { required: "El apellido es requerido" })}
+                  />
+                  {errors.lastName && (
+                    <p className="text-red-500 text-sm mt-1">{errors.lastName.message}</p>
+                  )}
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold text-gray-300 mb-2">
+                  Email *
+                </label>
+                <input
+                  type="email"
+                  className={`w-full px-4 py-3 rounded-lg border focus:outline-none focus:ring-2 focus:ring-rose-800 bg-gray-800 text-white placeholder-gray-500 ${
+                    errors.email ? "border-red-500" : "border-gray-700"
+                  }`}
+                  placeholder="correo@ejemplo.com"
+                  {...register("email", {
+                    required: "El correo es requerido",
+                    pattern: {
+                      value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                      message: "Correo inválido",
+                    },
+                  })}
+                />
+                {errors.email && (
+                  <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
+                )}
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold text-gray-300 mb-2">
+                  Numero de telefono
+                </label>
+                <input
+                  type="tel"
+                  className="w-full px-4 py-3 rounded-lg border border-gray-700 focus:outline-none focus:ring-2 focus:ring-rose-800 bg-gray-800 text-white placeholder-gray-500"
+                  placeholder="(733) 173-7362"
+                  {...register("phone")}
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold text-gray-300 mb-2">
+                  Asunto *
+                </label>
+                <select
+                  className={`w-full px-4 py-3 rounded-lg border focus:outline-none focus:ring-2 focus:ring-rose-800 bg-gray-800 text-white ${
+                    errors.subject ? "border-red-500" : "border-gray-700"
+                  }`}
+                  {...register("subject", { required: "Selecciona un asunto" })}
+                >
+                  <option value="">Selecciona un asunto</option>
+                  <option value="general">Consulta general</option>
+                  <option value="order_status">Estado del pedido</option>
+                  <option value="product_question">Pregunta sobre producto</option>
+                  <option value="returns">Devoluciones e intercambios</option>
+                  <option value="other">Otro</option>
+                </select>
+                {errors.subject && (
+                  <p className="text-red-500 text-sm mt-1">{errors.subject.message}</p>
+                )}
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold text-gray-300 mb-2">
+                  Describenos el asunto *
+                </label>
+                <textarea
+                  rows={6}
+                  className={`w-full px-4 py-3 rounded-lg border focus:outline-none focus:ring-2 focus:ring-rose-800 resize-none bg-gray-800 text-white placeholder-gray-500 ${
+                    errors.message ? "border-red-500" : "border-gray-700"
+                  }`}
+                  placeholder="Describe tu duda..."
+                  {...register("message", {
+                    required: "El mensaje es requerido",
+                    minLength: { value: 10, message: "Mínimo 10 caracteres" },
+                  })}
+                />
+                {errors.message && (
+                  <p className="text-red-500 text-sm mt-1">{errors.message.message}</p>
+                )}
+              </div>
+
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="w-full bg-rose-800 hover:bg-rose-700 disabled:bg-rose-900 disabled:cursor-not-allowed text-white py-4 rounded-lg font-semibold transition-colors shadow-lg shadow-rose-900/40 flex items-center justify-center gap-2"
+              >
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="h-5 w-5 animate-spin" />
+                    Enviando...
+                  </>
+                ) : (
+                  <>
+                    <MessageSquare className="h-5 w-5" />
+                    Enviar por WhatsApp
+                  </>
+                )}
+              </button>
+            </form>
+
+            <p className="text-sm text-gray-400 text-center mt-4">
+              Se abrirá WhatsApp con tu mensaje. Normalmente respondemos dentro de 24 horas.
+            </p>
+          </div>
+        </div>
+
+        {/* FAQ Section */}
+        <div id="faq" className="mt-16">
+          <h2 className="text-3xl font-bold text-white text-center mb-8">
+            Preguntas Frecuentes
+          </h2>
+          
+          <div className="max-w-3xl mx-auto space-y-4">
+            <div className="bg-gray-900/50 rounded-xl shadow-md p-6 border border-gray-800">
+              <h3 className="font-bold text-white mb-2">
+                ¿Qué tipo de MDF utilizan para manualidades?
+              </h3>
+              <p className="text-gray-400 text-sm">
+                Utilizamos MDF de alta calidad con grosor de 3mm, ideal para pintura y decoración. 
+                Es perfecto para proyectos como letreros, cajas, figuras y artículos personalizados.
+              </p>
+            </div>
+
+            <div className="bg-gray-900/50 rounded-xl shadow-md p-6 border border-gray-800">
+              <h3 className="font-bold text-white mb-2">
+                ¿El MDF se puede pintar fácilmente?
+              </h3>
+              <p className="text-gray-400 text-sm">
+                Sí, el MDF es un material excelente para pintar. Se recomienda sellar la superficie primero 
+                para obtener un mejor acabado, y luego aplicar pinturas acrílicas o en spray según tu proyecto.
+              </p>
+            </div>
+
+            <div className="bg-gray-900/50 rounded-xl shadow-md p-6 border border-gray-800">
+              <h3 className="font-bold text-white mb-2">
+                ¿Hacen diseños personalizados en MDF?
+              </h3>
+              <p className="text-gray-400 text-sm">
+                Sí, realizamos cortes y diseños personalizados en MDF. Puedes enviarnos tu idea o diseño, 
+                y te ayudamos a hacerlo realidad con corte láser o grabado.
+              </p>
+            </div>
+
+            <div className="bg-gray-900/50 rounded-xl shadow-md p-6 border border-gray-800">
+              <h3 className="font-bold text-white mb-2">
+                ¿Cómo debo cuidar mis piezas de MDF?
+              </h3>
+              <p className="text-gray-400 text-sm">
+                Se recomienda mantener las piezas en lugares secos y evitar la exposición directa al agua. 
+                Para mayor durabilidad, puedes sellarlas o barnizarlas después de decorarlas.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
