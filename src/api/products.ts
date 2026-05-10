@@ -1,8 +1,8 @@
 /// <reference types="vite/client" />
-const API_URL = import.meta.env.VITE_API_URL;
+const API_URL = import.meta.env.VITE_API_URL
 
 export type Product = {
-  id: string  // UUID from backend
+  id: string // UUID from backend
   name: string
   description: string | null
   price: number
@@ -37,10 +37,16 @@ export const getProductById = async (id: string): Promise<Product> => {
   return { ...json.data, price: parseFloat(json.data.price) }
 }
 
-export const createProduct = async (data: CreateProductDto): Promise<Product> => {
+export const createProduct = async (
+  data: CreateProductDto,
+  token: string,
+): Promise<Product> => {
   const res = await fetch(`${API_URL}/products`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
     body: JSON.stringify(data),
   })
   if (!res.ok) {
@@ -51,10 +57,17 @@ export const createProduct = async (data: CreateProductDto): Promise<Product> =>
   return { ...json.data.product, price: parseFloat(json.data.product.price) }
 }
 
-export const updateProduct = async (id: string, data: UpdateProductDto): Promise<Product> => {
+export const updateProduct = async (
+  id: string,
+  data: UpdateProductDto,
+  token: string,
+): Promise<Product> => {
   const res = await fetch(`${API_URL}/products/${id}`, {
     method: 'PATCH',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
     body: JSON.stringify(data),
   })
   if (!res.ok) {
@@ -65,9 +78,12 @@ export const updateProduct = async (id: string, data: UpdateProductDto): Promise
   return { ...json.data.updatedProduct, price: parseFloat(json.data.updatedProduct.price) }
 }
 
-export const deleteProduct = async (id: string): Promise<void> => {
+export const deleteProduct = async (id: string, token: string): Promise<void> => {
   const res = await fetch(`${API_URL}/products/${id}`, {
     method: 'DELETE',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
   })
   if (!res.ok) {
     const error = await res.json().catch(() => ({}))
