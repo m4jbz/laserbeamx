@@ -1,92 +1,125 @@
-import React, { useState } from 'react';
-import { useCart } from '../context/CartContext';
-import { Trash2, Plus, Minus, Loader2, AlertCircle } from 'lucide-react';
-import { useNavigate } from 'react-router'; 
-import { 
-  createOrder, 
-  PaymentMethod, 
+import React, { useEffect, useState } from 'react'
+import { useCart } from '../context/CartContext'
+import { Trash2, Plus, Minus, Loader2, AlertCircle } from 'lucide-react'
+import { useNavigate } from 'react-router'
+import {
+  createOrder,
+  PaymentMethod,
   DeliveryType,
   OrderStatus,
   PaymentStatus,
-} from '../../api/orders';
-
+} from '../../api/orders'
+import { uploadCustomerImageToCodeberg } from '../../api/codeberg'
+import { useClientAuth } from '../context/ClientAuthContext'
 
 export default function Checkout() {
-  const { cartItems, removeItem, updateQuantity, getTotalPrice, clearCart } = useCart();
-  const navigate = useNavigate();
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitError, setSubmitError] = useState<string | null>(null);
+  const { cartItems, removeItem, updateQuantity, getTotalPrice, clearCart } = useCart()
+  const navigate = useNavigate()
+  const { token: clientToken, client } = useClientAuth()
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitError, setSubmitError] = useState<string | null>(null)
+  const [paymentProof, setPaymentProof] = useState<File | null>(null)
 
-  const [customerName, setCustomerName] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState('');
-  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>(PaymentMethod.TRANSFER);
-  const [deliveryType, setDeliveryType] = useState<DeliveryType>(DeliveryType.PLACE);
+  const [customerName, setCustomerName] = useState(client?.name || '')
+  const [phoneNumber, setPhoneNumber] = useState(client?.phoneNumber || '')
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>(PaymentMethod.TRANSFER)
+  const [deliveryType, setDeliveryType] = useState<DeliveryType>(DeliveryType.PLACE)
   const [address, setAddress] = useState({
     street: '',
     number: '',
     colony: '',
     city: '',
     references: '',
-  });
-  const [notes, setNotes] = useState('');
-  const [formErrors, setFormErrors] = useState<any>({});
+  })
+  const [notes, setNotes] = useState('')
+  const [formErrors, setFormErrors] = useState<any>({})
+
+  useEffect(() => {
+    if (client?.name) {
+      setCustomerName(client.name)
+    }
+    if (client?.phoneNumber) {
+      setPhoneNumber(client.phoneNumber)
+    }
+  }, [client])
 
   const handlePhoneNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value.replace(/\D/g, '');
-    setPhoneNumber(value);
-  };
+    const value = e.target.value.replace(/\D/g, '').slice(0, 10)
+    setPhoneNumber(value)
+  }
 
   const validateForm = () => {
-    const errors: any = {};
-    if (!customerName.trim()) errors.customerName = 'El nombre del cliente es requerido.';
-    if (phoneNumber.length !== 10) errors.phoneNumber = 'El número de teléfono debe tener 10 dígitos.';
+    const errors: any = {}
+    if (!customerName.trim()) errors.customerName = 'El nombre del cliente es requerido.'
+    if (phoneNumber.length !== 10) errors.phoneNumber = 'El número de teléfono debe tener 10 dígitos.'
     if (deliveryType === DeliveryType.HOME) {
-      if (!address.street.trim()) errors.street = 'La calle es requerida.';
-      if (!address.number.trim()) errors.number = 'El número es requerido.';
-      if (!address.colony.trim()) errors.colony = 'La colonia es requerida.';
-      if (!address.city.trim()) errors.city = 'La ciudad es requerida.';
+      if (!address.street.trim()) errors.street = 'La calle es requerida.'
+      if (!address.number.trim()) errors.number = 'El número es requerido.'
+      if (!address.colony.trim()) errors.colony = 'La colonia es requerida.'
+      if (!address.city.trim()) errors.city = 'La ciudad es requerida.'
     }
-    setFormErrors(errors);
-    return Object.keys(errors).length === 0;
-  };
-  
+    setFormErrors(errors)
+    return Object.keys(errors).length === 0
+  }
+
   const handleSubmitOrder = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setSubmitError(null);
-    
+    e.preventDefault()
+    setSubmitError(null)
+
     if (!validateForm()) {
-      return;
+      return
     }
 
-    setIsSubmitting(true);
+    setIsSubmitting(true)
 
     try {
       // Construir dirección en las notas si es a domicilio
-      let orderNotes = notes || '';
+      let orderNotes = notes || ''
       if (deliveryType === DeliveryType.HOME) {
-        const addressStr = `Direccion: ${address.street} #${address.number}, Col. ${address.colony}, ${address.city}${address.references ? ` (Ref: ${address.references})` : ''}`;
-        orderNotes = orderNotes ? `${addressStr}\n\n${orderNotes}` : addressStr;
+        const addressStr = `Direccion: ${address.street} #${address.number}, Col. ${address.colony}, ${address.city}${
+          address.references ? ` (Ref: ${address.references})` : ''
+        }`
+        orderNotes = orderNotes ? `${addressStr}\n\n${orderNotes}` : addressStr
       }
 
-      const order = await createOrder({
-        clientName: customerName,
-        phoneNumber: `+52${phoneNumber}`,  // Formato internacional
-        paymentMethod,
-        deliveryType,
-        orderStatus: OrderStatus.PENDING,
-        paymentStatus: PaymentStatus.PENDING,
-        notes: orderNotes || undefined,
-        details: cartItems.map(item => ({ 
-          id: item.id, 
-          quantity: item.quantity 
-        })),
-      });
+      let proofUrl: string | null = null
+      if (paymentProof) {
+        try {
+          proofUrl = await uploadCustomerImageToCodeberg(paymentProof)
+        } catch (err) {
+          setSubmitError(err instanceof Error ? err.message : 'Error al subir comprobante')
+          setIsSubmitting(false)
+          return
+        }
+      }
+
+      if (proofUrl) {
+        const proofLine = `Comprobante: ${proofUrl}`
+        orderNotes = orderNotes ? `${orderNotes}\n\n${proofLine}` : proofLine
+      }
+
+      const order = await createOrder(
+        {
+          clientName: customerName,
+          phoneNumber,
+          paymentMethod,
+          deliveryType,
+          orderStatus: OrderStatus.PENDING,
+          paymentStatus: PaymentStatus.PENDING,
+          notes: orderNotes || undefined,
+          details: cartItems.map((item) => ({
+            id: item.id,
+            quantity: item.quantity,
+          })),
+        },
+        clientToken,
+      )
 
       // Guardar datos del carrito antes de limpiar para mostrar en confirmación
       const orderData = {
         ...order,
         total: getTotalPrice(), // Usar el total calculado localmente
-        cartItems: cartItems.map(item => ({
+        cartItems: cartItems.map((item) => ({
           name: item.name,
           quantity: item.quantity,
           price: item.price,
@@ -95,22 +128,23 @@ export default function Checkout() {
         deliveryType,
         paymentMethod,
         clientName: customerName,
-        phoneNumber: `+52${phoneNumber}`,
-      };
+        phoneNumber,
+      }
 
-      clearCart();
-      
+      clearCart()
+      setPaymentProof(null)
+
       // Navegar a la página de confirmación con los datos del pedido
-      navigate('/order-confirmation', { state: { order: orderData } });
+      navigate('/order-confirmation', { state: { order: orderData } })
     } catch (error) {
-      console.error('Error al crear pedido:', error);
-      setSubmitError(error instanceof Error ? error.message : 'Error al procesar tu pedido. Por favor intenta de nuevo.');
+      console.error('Error al crear pedido:', error)
+      setSubmitError(error instanceof Error ? error.message : 'Error al procesar tu pedido. Por favor intenta de nuevo.')
     } finally {
-      setIsSubmitting(false);
+      setIsSubmitting(false)
     }
-  };
+  }
 
-  const totalPrice = getTotalPrice();
+  const totalPrice = getTotalPrice()
 
   return (
     <div className="min-h-screen bg-[#0B0C14] text-white p-6 md:p-10">
@@ -310,6 +344,48 @@ export default function Checkout() {
                     value={notes}
                     onChange={(e) => setNotes(e.target.value)}
                   />
+                </div>
+
+                <div>
+                  <label
+                    htmlFor="paymentProof"
+                    className="block text-gray-300 text-sm font-bold mb-2"
+                  >
+                    Comprobante de Pago:
+                  </label>
+                  <input
+                    type="file"
+                    id="paymentProof"
+                    accept="image/*"
+                    capture="environment"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) {
+                        setPaymentProof(file);
+                      }
+                    }}
+                    className="w-full p-3 bg-gray-800 text-white rounded border border-gray-700 file:bg-green-900 file:text-white file:border-0 file:px-4 file:py-2 file:rounded-lg file:cursor-pointer file:hover:bg-rose-600"
+                  />
+
+                  {paymentProof && (
+                    <div className="mt-4 relative bg-gray-900 border border-gray-700 rounded-xl p-3">
+                      <button
+                        type="button"
+                        onClick={() => setPaymentProof(null)}
+                        className="absolute top-2 right-2 w-8 h-8 rounded-full bg-red-600 hover:bg-red-500 text-white flex items-center justify-center font-bold transition-colors"
+                      >
+                        ✕
+                      </button>
+                      <p className="text-green-400 text-sm mb-3 break-all pr-10">
+                        {paymentProof.name}
+                      </p>
+                      <img
+                        src={URL.createObjectURL(paymentProof)}
+                        alt="Comprobante"
+                        className="rounded-lg max-h-56 w-full object-cover border border-gray-700"
+                      />
+                    </div>
+                  )}
                 </div>
 
                 <button

@@ -60,7 +60,7 @@ export type Order = {
 export type CreateOrderDto = {
   notes?: string
   clientName: string
-  phoneNumber: string  // Formato internacional: +52XXXXXXXXXX
+  phoneNumber: string
   orderStatus: OrderStatus
   paymentStatus: PaymentStatus
   paymentMethod: PaymentMethod
@@ -109,10 +109,17 @@ export const getOrderById = async (id: string): Promise<Order> => {
   return parseOrder(json.data)
 }
 
-export const createOrder = async (data: CreateOrderDto): Promise<Order> => {
+export const createOrder = async (
+  data: CreateOrderDto,
+  token?: string | null,
+): Promise<Order> => {
+  const headers: Record<string, string> = { 'Content-Type': 'application/json' }
+  if (token) {
+    headers.Authorization = `Bearer ${token}`
+  }
   const res = await fetch(`${API_URL}/orders`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers,
     body: JSON.stringify(data),
   })
   if (!res.ok) {
