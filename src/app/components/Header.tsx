@@ -1,24 +1,26 @@
-import { Link, useLocation } from "react-router";
-import { Search, ShoppingCart, User, Menu, X } from "lucide-react";
-import { useCart } from "../context/CartContext"; // Importar useCart
-import { useState } from "react";
+import { Link, useLocation } from 'react-router'
+import { Search, ShoppingCart, User, Menu, X } from 'lucide-react'
+import { useCart } from '../context/CartContext' // Importar useCart
+import { useState } from 'react'
+import ClientAuthModal from './ClientAuthModal'
 
 export default function Header() {
-  const { getTotalItems } = useCart(); // Obtener el total de items del carrito
-  const totalItems = getTotalItems();
-  const location = useLocation();
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  
+  const { getTotalItems } = useCart() // Obtener el total de items del carrito
+  const totalItems = getTotalItems()
+  const location = useLocation()
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [clientModalOpen, setClientModalOpen] = useState(false)
+
   const navLinks = [
-    { name: "Inicio", path: "/" },
-    { name: "Ventas", path: "/shop" },
-    { name: "Órdenes personalizadas", path: "/custom-orders" },
-    { name: "Contactos", path: "/contact" },
-  ];
+    { name: 'Inicio', path: '/' },
+    { name: 'Ventas', path: '/shop' },
+    { name: 'Órdenes personalizadas', path: '/custom-orders' },
+    { name: 'Contactos', path: '/contact' },
+  ]
 
   const isActive = (path: string) => {
-    return location.pathname === path;
-  };
+    return location.pathname === path
+  }
 
   return (
     <header className="sticky top-0 z-50 bg-[#0B0C14] shadow-sm">
@@ -84,7 +86,10 @@ export default function Header() {
             </Link>
 
             {/* User Icon */}
-            <button className="p-2 hover:bg-gray-800 rounded-full">
+            <button
+              className="p-2 hover:bg-gray-800 rounded-full"
+              onClick={() => setClientModalOpen(true)}
+            >
               <User className="w-5 h-5 text-gray-300" />
             </button>
 
@@ -124,6 +129,7 @@ export default function Header() {
           </div>
         )}
       </div>
+      <ClientAuthModal open={clientModalOpen} onOpenChange={setClientModalOpen} />
     </header>
-  );
+  )
 }
