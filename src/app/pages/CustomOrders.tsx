@@ -26,6 +26,7 @@ export default function CustomOrders() {
     handleSubmit,
     formState: { errors },
     reset,
+    setValue,  
   } = useForm<FormData>({
     defaultValues: {
       name: "",
@@ -248,17 +249,29 @@ export default function CustomOrders() {
               </div>
             </div>
 
-            <div>
-              <label className="block text-sm font-semibold text-gray-300 mb-2">
-                Número de teléfono
-              </label>
-              <input
-                type="tel"
-                className="w-full px-4 py-3 rounded-lg border border-gray-700 focus:outline-none focus:ring-2 focus:ring-rose-800 bg-gray-800 text-white placeholder-gray-500"
-                placeholder="(555) 123-4567"
-                {...register("phone")}
-              />
-            </div>
+<div>
+  <label className="block text-sm font-semibold text-gray-300 mb-2">
+    Número de teléfono
+  </label>
+  <input
+    type="tel"
+    className={`w-full px-4 py-3 rounded-lg border focus:outline-none focus:ring-2 focus:ring-rose-800 bg-gray-800 text-white placeholder-gray-500 ${
+      errors.phone ? "border-red-500" : "border-gray-700"
+    }`}
+    placeholder="5551234567"
+    {...register("phone", {
+      required: "El teléfono es obligatorio",
+      pattern: { value: /^\d{10}$/, message: "Debe contener exactamente 10 dígitos" },
+    })}
+    onChange={(e) => {
+      const clean = e.target.value.replace(/\D/g, "").slice(0, 10);
+      setValue("phone", clean, { shouldValidate: true });
+    }}
+  />
+  {errors.phone && (
+    <p className="text-red-500 text-sm mt-1">{errors.phone.message}</p>
+  )}
+</div>
 
             <div>
               <label className="block text-sm font-semibold text-gray-300 mb-2">

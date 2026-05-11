@@ -29,6 +29,7 @@ export default function Contact() {
     handleSubmit,
     formState: { errors },
     reset,
+    setValue,
   } = useForm<FormData>({
     defaultValues: {
       firstName: "",
@@ -135,7 +136,8 @@ export default function Contact() {
                 <div>
                   <h3 className="font-bold text-white mb-1">Dirección</h3>
                   <p className="text-gray-400 text-sm">
-                    Calle: Bandera Nacional<br />
+                    Calle: carretera iguala - chilpancingo<br />
+                    Colonia: Tomatal<br />
                     Iguala de la independecia, CP: 40000<br />
                     Guerrero, México
                   </p>
@@ -226,14 +228,26 @@ export default function Contact() {
 
               <div>
                 <label className="block text-sm font-semibold text-gray-300 mb-2">
-                  Numero de telefono
+                  Número de teléfono
                 </label>
                 <input
                   type="tel"
-                  className="w-full px-4 py-3 rounded-lg border border-gray-700 focus:outline-none focus:ring-2 focus:ring-rose-800 bg-gray-800 text-white placeholder-gray-500"
-                  placeholder="(733) 173-7362"
-                  {...register("phone")}
+                  className={`w-full px-4 py-3 rounded-lg border focus:outline-none focus:ring-2 focus:ring-rose-800 bg-gray-800 text-white placeholder-gray-500 ${
+                    errors.phone ? "border-red-500" : "border-gray-700"
+                  }`}
+                  placeholder="7331002367"
+                  {...register("phone", {
+                    required: "El teléfono es obligatorio",
+                    pattern: { value: /^\d{10}$/, message: "Debe contener 10 dígitos" },
+                  })}
+                  onChange={(e) => {
+                    const clean = e.target.value.replace(/\D/g, "").slice(0, 10);
+                    setValue("phone", clean, { shouldValidate: true });
+                  }}
                 />
+                {errors.phone && (
+                  <p className="text-red-500 text-sm mt-1">{errors.phone.message}</p>
+                )}
               </div>
 
               <div>
