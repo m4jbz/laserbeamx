@@ -1,4 +1,14 @@
 import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react'
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+  ReactNode,
+} from 'react'
+import { getClientProfile } from '../../api/clients'
+>>>>>>> 9e4d092 (clientes apartado)
 
 type ClientProfile = {
   id: string
@@ -46,15 +56,38 @@ export const ClientAuthProvider = ({ children }: { children: ReactNode }) => {
     }
   }, [client])
 
-  const login = (newToken: string, newClient: ClientProfile) => {
+  const login = useCallback((newToken: string, newClient: ClientProfile) => {
     setToken(newToken)
     setClient(newClient)
-  }
+  }, [])
 
-  const logout = () => {
+  const logout = useCallback(() => {
     setToken(null)
     setClient(null)
-  }
+  }, [])
+
+  useEffect(() => {
+    if (!token) return
+    let cancelled = false
+
+    getClientProfile(token)
+      .then((response) => {
+        if (cancelled) return
+        const profile = response.data ?? response
+        setClient(profile)
+      })
+      .catch((err) => {
+        if (cancelled) return
+        const status = (err as { status?: number }).status
+        if (status === 401) {
+          logout()
+        }
+      })
+
+    return () => {
+      cancelled = true
+    }
+  }, [token, logout])
 
   return (
     <ClientAuthContext.Provider

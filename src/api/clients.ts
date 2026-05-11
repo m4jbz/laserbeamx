@@ -1,6 +1,20 @@
 /// <reference types="vite/client" />
 const API_URL = import.meta.env.VITE_API_URL
 
+type ApiError = Error & { status?: number }
+
+const getErrorMessage = (json: any, fallback: string) => {
+  if (json?.message) {
+    return Array.isArray(json.message) ? json.message.join(', ') : json.message
+  }
+  return fallback
+}
+
+const toError = (res: Response, json: any, fallback: string): ApiError => {
+  const error = new Error(getErrorMessage(json, fallback)) as ApiError
+  error.status = res.status
+  return error
+}
 export type ClientProfile = {
   id: string
   name: string
@@ -30,7 +44,7 @@ export const registerClient = async (data: RegisterClientDto) => {
 
   const json = await res.json().catch(() => ({}))
   if (!res.ok) {
-    throw new Error(json.message || 'Error al crear cuenta')
+    throw toError(res, json, 'Error al crear cuenta')
   }
   return json
 }
@@ -44,7 +58,7 @@ export const loginClient = async (data: LoginClientDto) => {
 
   const json = await res.json().catch(() => ({}))
   if (!res.ok) {
-    throw new Error(json.message || 'Credenciales incorrectas')
+    throw toError(res, json, 'Credenciales incorrectas')
   }
   return json
 }
@@ -58,7 +72,7 @@ export const getClientProfile = async (token: string) => {
 
   const json = await res.json().catch(() => ({}))
   if (!res.ok) {
-    throw new Error(json.message || 'Error al obtener perfil')
+    throw toError(res, json, 'Error al obtener perfil')
   }
   return json
 }
@@ -72,7 +86,7 @@ export const getClientOrders = async (token: string) => {
 
   const json = await res.json().catch(() => ({}))
   if (!res.ok) {
-    throw new Error(json.message || 'Error al obtener pedidos')
+    throw toError(res, json, 'Error al obtener pedidos')
   }
   return json
 }

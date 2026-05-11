@@ -14,7 +14,7 @@ type ClientOrder = {
 }
 
 export default function ClientOrders() {
-  const { token, isAuthenticated } = useClientAuth()
+  const { token, isAuthenticated, logout } = useClientAuth()
   const [orders, setOrders] = useState<ClientOrder[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -35,6 +35,11 @@ export default function ClientOrders() {
       const response = await getClientOrders(token)
       setOrders(response.data || [])
     } catch (err) {
+      const status = (err as { status?: number }).status
+      if (status === 401) {
+        logout()
+        return
+      }
       setError(err instanceof Error ? err.message : 'Error al cargar pedidos')
     } finally {
       setLoading(false)

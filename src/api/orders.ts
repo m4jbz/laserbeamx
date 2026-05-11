@@ -127,8 +127,12 @@ export const createOrder = async (
     body: JSON.stringify(data),
   })
   if (!res.ok) {
-    const error = await res.json().catch(() => ({}))
-    throw new Error(error.message || 'Error al crear pedido')
+    const errorBody = await res.json().catch(() => ({}))
+    const error = new Error(errorBody.message || 'Error al crear pedido') as Error & {
+      status?: number
+    }
+    error.status = res.status
+    throw error
   }
   const json = await res.json()
   return parseOrder(json.data.order)

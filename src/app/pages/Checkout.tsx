@@ -1,29 +1,34 @@
-import React, { useEffect, useState } from 'react'
-import { useCart } from '../context/CartContext'
-import { Trash2, Plus, Minus, Loader2, AlertCircle } from 'lucide-react'
-import { useNavigate } from 'react-router'
-import {
-  createOrder,
-  PaymentMethod,
+import React, { useEffect, useState } from 'react';
+import { useCart } from '../context/CartContext';
+import { Trash2, Plus, Minus, Loader2, AlertCircle } from 'lucide-react';
+import { useNavigate } from 'react-router'; 
+import { 
+  createOrder, 
+  PaymentMethod, 
   DeliveryType,
   OrderStatus,
   PaymentStatus,
-} from '../../api/orders'
-import { uploadCustomerImageToCodeberg } from '../../api/codeberg'
-import { useClientAuth } from '../context/ClientAuthContext'
+} from '../../api/orders';
+import { uploadCustomerImageToCodeberg } from '../../api/codeberg';
+import { useClientAuth } from '../context/ClientAuthContext';
+
 
 export default function Checkout() {
-  const { cartItems, removeItem, updateQuantity, getTotalPrice, clearCart } = useCart()
-  const navigate = useNavigate()
-  const { token: clientToken, client } = useClientAuth()
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [submitError, setSubmitError] = useState<string | null>(null)
-  const [paymentProof, setPaymentProof] = useState<File | null>(null)
+  const { cartItems, removeItem, updateQuantity, getTotalPrice, clearCart } = useCart();
+  const navigate = useNavigate();
+  const { token: clientToken, client } = useClientAuth();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [paymentProof, setPaymentProof] = useState<File | null>(null);
 
-  const [customerName, setCustomerName] = useState(client?.name || '')
-  const [phoneNumber, setPhoneNumber] = useState(client?.phoneNumber || '')
-  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>(PaymentMethod.TRANSFER)
-  const [deliveryType, setDeliveryType] = useState<DeliveryType>(DeliveryType.PLACE)
+  const [customerName, setCustomerName] = useState(client?.name || '');
+  const [phoneNumber, setPhoneNumber] = useState(() => {
+    if (!client?.phoneNumber) return '';
+    const digits = client.phoneNumber.replace(/\D/g, '');
+    return digits.length > 10 ? digits.slice(-10) : digits;
+  });
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>(PaymentMethod.TRANSFER);
+  const [deliveryType, setDeliveryType] = useState<DeliveryType>(DeliveryType.PLACE);
   const [address, setAddress] = useState({
     street: '',
     number: '',
@@ -43,10 +48,20 @@ export default function Checkout() {
     }
   }, [client])
 
+  useEffect(() => {
+    if (client?.name) {
+      setCustomerName(client.name);
+    }
+    if (client?.phoneNumber) {
+      const digits = client.phoneNumber.replace(/\D/g, '');
+      setPhoneNumber(digits.length > 10 ? digits.slice(-10) : digits);
+    }
+  }, [client]);
+
   const handlePhoneNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value.replace(/\D/g, '').slice(0, 10)
-    setPhoneNumber(value)
-  }
+    const value = e.target.value.replace(/\D/g, '').slice(0, 10);
+    setPhoneNumber(value);
+  };
 
   const validateForm = () => {
     const errors: any = {}
@@ -82,38 +97,36 @@ export default function Checkout() {
         orderNotes = orderNotes ? `${addressStr}\n\n${orderNotes}` : addressStr
       }
 
-      let proofUrl: string | null = null
+      let proofUrl: string | null = null;
       if (paymentProof) {
         try {
-          proofUrl = await uploadCustomerImageToCodeberg(paymentProof)
+          proofUrl = await uploadCustomerImageToCodeberg(paymentProof);
         } catch (err) {
-          setSubmitError(err instanceof Error ? err.message : 'Error al subir comprobante')
-          setIsSubmitting(false)
-          return
+          setSubmitError(err instanceof Error ? err.message : 'Error al subir comprobante');
+          return;
         }
       }
 
       if (proofUrl) {
-        const proofLine = `Comprobante: ${proofUrl}`
-        orderNotes = orderNotes ? `${orderNotes}\n\n${proofLine}` : proofLine
+        const proofLine = `Comprobante: ${proofUrl}`;
+        orderNotes = orderNotes ? `${orderNotes}\n\n${proofLine}` : proofLine;
       }
 
-      const order = await createOrder(
-        {
-          clientName: customerName,
-          phoneNumber,
-          paymentMethod,
-          deliveryType,
-          orderStatus: OrderStatus.PENDING,
-          paymentStatus: PaymentStatus.PENDING,
-          notes: orderNotes || undefined,
-          details: cartItems.map((item) => ({
-            id: item.id,
-            quantity: item.quantity,
-          })),
-        },
-        clientToken,
-      )
+      const formattedPhoneNumber = `+52${phoneNumber}`;
+
+      const order = await createOrder({
+        clientName: customerName,
+        phoneNumber: formattedPhoneNumber,  // Formato internacional
+        paymentMethod,
+        deliveryType,
+        orderStatus: OrderStatus.PENDING,
+        paymentStatus: PaymentStatus.PENDING,
+        notes: orderNotes || undefined,
+        details: cartItems.map(item => ({ 
+          id: item.id, 
+          quantity: item.quantity 
+        })),
+      }, clientToken);
 
       // Guardar datos del carrito antes de limpiar para mostrar en confirmación
       const orderData = {
@@ -128,11 +141,11 @@ export default function Checkout() {
         deliveryType,
         paymentMethod,
         clientName: customerName,
-        phoneNumber,
-      }
+        phoneNumber: formattedPhoneNumber,
+      };
 
-      clearCart()
-      setPaymentProof(null)
+      clearCart();
+      setPaymentProof(null);
 
       // Navegar a la página de confirmación con los datos del pedido
       navigate('/order-confirmation', { state: { order: orderData } })
@@ -347,12 +360,7 @@ export default function Checkout() {
                 </div>
 
                 <div>
-                  <label
-                    htmlFor="paymentProof"
-                    className="block text-gray-300 text-sm font-bold mb-2"
-                  >
-                    Comprobante de Pago:
-                  </label>
+                  <label htmlFor="paymentProof" className="block text-gray-300 text-sm font-bold mb-2">Comprobante de Pago:</label>
                   <input
                     type="file"
                     id="paymentProof"
@@ -376,9 +384,11 @@ export default function Checkout() {
                       >
                         ✕
                       </button>
+
                       <p className="text-green-400 text-sm mb-3 break-all pr-10">
                         {paymentProof.name}
                       </p>
+
                       <img
                         src={URL.createObjectURL(paymentProof)}
                         alt="Comprobante"

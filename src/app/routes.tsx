@@ -1,44 +1,59 @@
-import { createBrowserRouter, Navigate } from "react-router";
-import Home from "./pages/Home";
-import Shop from "./pages/Shop";
-import CustomOrders from "./pages/CustomOrders";
-import Contact from "./pages/Contact";
-import Layout from "./components/Layout";
-import Checkout from "./pages/Checkout";
-import OrderConfirmation from "./pages/OrderConfirmation";
-import AdminPanel from "./pages/AdminPanel";
-import { useAuth } from "./context/AuthContext";
+import { createBrowserRouter, Navigate } from 'react-router'
+import Home from './pages/Home'
+import Shop from './pages/Shop'
+import CustomOrders from './pages/CustomOrders'
+import Contact from './pages/Contact'
+import Layout from './components/Layout'
+import Checkout from './pages/Checkout'
+import OrderConfirmation from './pages/OrderConfirmation'
+import AdminPanel from './pages/AdminPanel'
+import ClientOrders from './pages/ClientOrders'
+import { useAuth } from './context/AuthContext'
+import { useClientAuth } from './context/ClientAuthContext'
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
-  const { isAuthenticated } = useAuth();
-  return isAuthenticated ? <>{children}</> : <Navigate to="/" replace />;
-};
+  const { isAuthenticated } = useAuth()
+  return isAuthenticated ? <>{children}</> : <Navigate to="/" replace />
+}
+
+const ClientProtectedRoute = ({ children }: { children: React.ReactNode }) => {
+  const { isAuthenticated } = useClientAuth()
+  return isAuthenticated ? <>{children}</> : <Navigate to="/" replace />
+}
 
 export const router = createBrowserRouter([
   {
-    path: "/",
+    path: '/',
     Component: Layout,
     children: [
       { index: true, Component: Home },
-      { path: "shop", Component: Shop },
-      { path: "custom-orders", Component: CustomOrders },
-      { path: "contact", Component: Contact },
+      { path: 'shop', Component: Shop },
+      { path: 'custom-orders', Component: CustomOrders },
+      { path: 'contact', Component: Contact },
+      {
+        path: 'mis-pedidos',
+        element: (
+          <ClientProtectedRoute>
+            <ClientOrders />
+          </ClientProtectedRoute>
+        ),
+      },
     ],
   },
   {
-    path: "/checkout",
+    path: '/checkout',
     Component: Checkout,
   },
   {
-    path: "/order-confirmation",
+    path: '/order-confirmation',
     Component: OrderConfirmation,
   },
   {
-    path: "/admin",
+    path: '/admin',
     element: (
       <ProtectedRoute>
         <AdminPanel />
       </ProtectedRoute>
     ),
   },
-]);
+])

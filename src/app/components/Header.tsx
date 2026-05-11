@@ -2,11 +2,13 @@ import { Link, useLocation } from 'react-router'
 import { Search, ShoppingCart, User, Menu, X } from 'lucide-react'
 import { useCart } from '../context/CartContext'
 import { useState } from 'react'
+import { useClientAuth } from '../context/ClientAuthContext'
 import ClientAuthModal from './ClientAuthModal'
 
 export default function Header() {
   const { cartItems } = useCart()
   const location = useLocation()
+  const { isAuthenticated, client } = useClientAuth()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [clientModalOpen, setClientModalOpen] = useState(false)
 
@@ -15,6 +17,7 @@ export default function Header() {
     { name: 'Ventas', path: '/shop' },
     { name: 'Órdenes personalizadas', path: '/custom-orders' },
     { name: 'Contactos', path: '/contact' },
+    ...(isAuthenticated ? [{ name: 'Mis pedidos', path: '/mis-pedidos' }] : []),
   ]
 
   const isActive = (path: string) => {
@@ -84,6 +87,14 @@ export default function Header() {
             >
               <User className="w-5 h-5 text-gray-300" />
             </button>
+            {isAuthenticated && client?.name && (
+              <button
+                onClick={() => setClientModalOpen(true)}
+                className="hidden sm:inline-flex items-center text-sm font-semibold text-gray-200 hover:text-rose-300"
+              >
+                {client.name.split(' ')[0]}
+              </button>
+            )}
 
             {/* Mobile Menu Toggle */}
             <button
@@ -110,8 +121,8 @@ export default function Header() {
                   onClick={() => setMobileMenuOpen(false)}
                   className={`px-4 py-2 rounded-lg transition-colors ${
                     isActive(link.path)
-                      ? "bg-rose-900/30 text-rose-400 font-medium"
-                      : "text-gray-300 hover:bg-gray-800"
+                      ? 'bg-rose-900/30 text-rose-400 font-medium'
+                      : 'text-gray-300 hover:bg-gray-800'
                   }`}
                 >
                   {link.name}
