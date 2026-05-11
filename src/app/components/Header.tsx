@@ -1,12 +1,11 @@
 import { Link, useLocation } from 'react-router'
 import { Search, ShoppingCart, User, Menu, X } from 'lucide-react'
-import { useCart } from '../context/CartContext' // Importar useCart
+import { useCart } from '../context/CartContext'
 import { useState } from 'react'
 import ClientAuthModal from './ClientAuthModal'
 
 export default function Header() {
-  const { getTotalItems } = useCart() // Obtener el total de items del carrito
-  const totalItems = getTotalItems()
+  const { cartItems } = useCart()
   const location = useLocation()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [clientModalOpen, setClientModalOpen] = useState(false)
@@ -21,6 +20,9 @@ export default function Header() {
   const isActive = (path: string) => {
     return location.pathname === path
   }
+
+  // PRODUCTOS ÚNICOS
+  const totalItems = new Set(cartItems.map((item) => item.id)).size
 
   return (
     <header className="sticky top-0 z-50 bg-[#0B0C14] shadow-sm">
@@ -41,7 +43,6 @@ export default function Header() {
             </span>
           </Link>
 
-          {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
             {navLinks.map((link) => (
               <Link
@@ -58,26 +59,17 @@ export default function Header() {
             ))}
           </nav>
 
-          {/* Right Side Icons */}
           <div className="flex items-center space-x-4">
-            {/* Search Bar - Desktop */}
-            <div className="hidden lg:flex items-center bg-gray-800/50 border border-gray-700 rounded-full px-4 py-2 w-64">
-              <Search className="w-4 h-4 text-gray-400" />
-              <input
-                type="text"
-                placeholder="Buscar productos..."
-                className="bg-transparent border-none outline-none ml-2 w-full text-sm text-gray-200 placeholder-gray-500"
-              />
-            </div>
 
             {/* Search Button - Mobile */}
             <button className="lg:hidden p-2 hover:bg-gray-800 rounded-full">
               <Search className="w-5 h-5 text-gray-300" />
             </button>
 
-            {/* Shopping Cart Icon */}
+            {/* Cart */}
             <Link to="/checkout" className="relative p-2 hover:bg-gray-800 rounded-full">
               <ShoppingCart className="w-5 h-5 text-gray-300" />
+
               {totalItems > 0 && (
                 <span className="absolute -top-1 -right-1 bg-rose-700 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
                   {totalItems}
@@ -85,7 +77,7 @@ export default function Header() {
               )}
             </Link>
 
-            {/* User Icon */}
+            {/* User */}
             <button
               className="p-2 hover:bg-gray-800 rounded-full"
               onClick={() => setClientModalOpen(true)}
@@ -129,6 +121,7 @@ export default function Header() {
           </div>
         )}
       </div>
+
       <ClientAuthModal open={clientModalOpen} onOpenChange={setClientModalOpen} />
     </header>
   )

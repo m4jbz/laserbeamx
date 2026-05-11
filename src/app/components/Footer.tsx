@@ -72,7 +72,7 @@ export default function Footer() {
               </a>
 
               <a
-                href="https://www.instagram.com/_manualidades_ss/?hl=es-es"
+                href="https://www.instagram.com/laserbeamx"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-10 h-10 bg-gray-800 hover:bg-rose-800 rounded-full flex items-center justify-center transition-colors"
