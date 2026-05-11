@@ -8,7 +8,6 @@ import React, {
   ReactNode,
 } from 'react'
 import { getClientProfile } from '../../api/clients'
->>>>>>> 9e4d092 (clientes apartado)
 
 type ClientProfile = {
   id: string
