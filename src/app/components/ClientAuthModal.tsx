@@ -47,6 +47,28 @@ export default function ClientAuthModal({ open, onOpenChange }: Props) {
   const handleRegisterSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError(null)
+
+    if (!registerData.name.trim()) {
+      setError('El nombre es requerido')
+      return
+    }
+    if (!registerData.email.trim()) {
+      setError('El correo es requerido')
+      return
+    }
+    if (!registerData.password.trim()) {
+      setError('La contrasena es requerida')
+      return
+    }
+    if (registerData.password.trim().length < 8) {
+      setError('La contrasena debe tener minimo 8 caracteres')
+      return
+    }
+    if (registerData.phoneNumber.length !== 10) {
+      setError('El telefono debe tener 10 digitos')
+      return
+    }
+
     setIsSubmitting(true)
 
     try {
@@ -169,6 +191,7 @@ export default function ClientAuthModal({ open, onOpenChange }: Props) {
                 <input
                   type="text"
                   placeholder="Nombre"
+                  required
                   className="w-full rounded-lg border border-gray-700 bg-gray-900 p-3 text-white"
                   value={registerData.name}
                   onChange={(e) =>
@@ -178,6 +201,7 @@ export default function ClientAuthModal({ open, onOpenChange }: Props) {
                 <input
                   type="email"
                   placeholder="Correo"
+                  required
                   className="w-full rounded-lg border border-gray-700 bg-gray-900 p-3 text-white"
                   value={registerData.email}
                   onChange={(e) =>
@@ -187,6 +211,8 @@ export default function ClientAuthModal({ open, onOpenChange }: Props) {
                 <input
                   type="password"
                   placeholder="Contrasena (min 8)"
+                  required
+                  minLength={8}
                   className="w-full rounded-lg border border-gray-700 bg-gray-900 p-3 text-white"
                   value={registerData.password}
                   onChange={(e) =>
@@ -196,6 +222,9 @@ export default function ClientAuthModal({ open, onOpenChange }: Props) {
                 <input
                   type="tel"
                   placeholder="Telefono (10 digitos)"
+                  required
+                  minLength={10}
+                  maxLength={10}
                   className="w-full rounded-lg border border-gray-700 bg-gray-900 p-3 text-white"
                   value={registerData.phoneNumber}
                   onChange={(e) => handlePhoneChange(e.target.value)}
