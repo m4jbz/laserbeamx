@@ -50,7 +50,10 @@ export default function ClientAuthModal({ open, onOpenChange }: Props) {
     setIsSubmitting(true)
 
     try {
-      await registerClient(registerData)
+      await registerClient({
+        ...registerData,
+        phoneNumber: `+52${registerData.phoneNumber}`,
+      })
       const response = await loginClient({
         email: registerData.email,
         password: registerData.password,
